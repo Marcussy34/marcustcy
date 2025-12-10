@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
@@ -25,6 +25,18 @@ const sectionVariants = {
 };
 
 export default function Home() {
+  const [showCurtain, setShowCurtain] = useState(true);
+  const [bootText, setBootText] = useState("");
+  const [bootStep, setBootStep] = useState(0);
+
+  // Boot sequence messages
+  const bootMessages = [
+    "Initializing system...",
+    "Loading portfolio.exe",
+    "Mounting components...",
+    "System ready."
+  ];
+
   // Scroll restoration - save and restore scroll position on refresh
   useEffect(() => {
     // Restore scroll position after page loads
@@ -66,9 +78,101 @@ export default function Home() {
     };
   }, []);
 
+  // Boot sequence animation
+  useEffect(() => {
+    const timeouts: NodeJS.Timeout[] = [];
+    
+    // Step through boot messages
+    timeouts.push(setTimeout(() => setBootStep(1), 200));
+    timeouts.push(setTimeout(() => setBootStep(2), 600));
+    timeouts.push(setTimeout(() => setBootStep(3), 1000));
+    timeouts.push(setTimeout(() => setBootStep(4), 1400));
+
+    return () => timeouts.forEach(clearTimeout);
+  }, []);
+
+  // Wait for document ready before lifting curtain
+  useEffect(() => {
+    const checkReady = () => {
+      if (document.readyState === 'complete' && bootStep >= 4) {
+        // Add small delay after ready for smooth transition
+        setTimeout(() => {
+          setShowCurtain(false);
+        }, 300);
+      }
+    };
+
+    // Check immediately in case already ready
+    checkReady();
+
+    // Also listen for load event
+    window.addEventListener('load', checkReady);
+    
+    return () => window.removeEventListener('load', checkReady);
+  }, [bootStep]);
+
   return (
-    <main className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white">
-      <Navbar />
+    <>
+      {/* Curtain Reveal Animation with Boot Sequence */}
+      <AnimatePresence>
+        {showCurtain && (
+          <motion.div
+            className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
+            initial={{ clipPath: "circle(100% at 50% 50%)", opacity: 1 }}
+            exit={{ clipPath: "circle(0% at 50% 50%)", opacity: 0 }}
+            transition={{
+              duration: 1,
+              ease: [0.65, 0, 0.35, 1],
+            }}
+          >
+            {/* Boot Sequence Text */}
+            <div className="font-mono text-sm md:text-base space-y-2 text-left max-w-md px-6">
+              {bootStep >= 1 && (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }}
+                  className="text-gray-500"
+                >
+                  <span className="text-primary">❯</span> {bootMessages[0]}
+                </motion.div>
+              )}
+              {bootStep >= 2 && (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }}
+                  className="text-gray-400"
+                >
+                  <span className="text-primary">✔</span> {bootMessages[1]}
+                </motion.div>
+              )}
+              {bootStep >= 3 && (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }}
+                  className="text-gray-400"
+                >
+                  <span className="text-primary">✔</span> {bootMessages[2]}
+                </motion.div>
+              )}
+              {bootStep >= 4 && (
+                <motion.div 
+                  initial={{ opacity: 0 }} 
+                  animate={{ opacity: 1 }}
+                  className="text-primary font-semibold"
+                >
+                  <span>✔</span> {bootMessages[3]}
+                </motion.div>
+              )}
+              {bootStep < 4 && (
+                <span className="text-primary animate-pulse">_</span>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <main className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white">
+        <Navbar />
       
       {/* Hero section with fade-in animation */}
       <motion.div
@@ -120,5 +224,6 @@ export default function Home() {
         <Contact />
       </motion.div>
     </main>
+    </>
   );
 }

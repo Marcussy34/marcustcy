@@ -14,7 +14,7 @@ export default function Hero() {
   const titleIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const descIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  const fullInitText = "init portfolio.exe";
+  const fullInitText = "whoami --verbose";
   const fullText = "$ compose dApps & AI solutions";
   const fullDescription = "I'm Marcus Tan. Full Stack Developer / AI Engineer / Web3 Enthusiast. I specialize in building Web Applications, AI applications and Decentralized Applications (dApps).";
 
@@ -22,38 +22,38 @@ export default function Hero() {
   useEffect(() => {
     const timeouts: NodeJS.Timeout[] = [];
 
-    // Step 1: Start typing "init portfolio.exe"
+    // Step 1: Start typing "whoami --verbose"
     timeouts.push(setTimeout(() => setBootStep(1), 300));
     
-    // Init typing duration: 18 chars * 50ms = 900ms
-    // 300 + 900 = 1200ms
+    // Init typing duration: 16 chars * 50ms = 800ms
+    // 300 + 800 = 1100ms
     
-    // Step 2: AI_Engine loaded
-    timeouts.push(setTimeout(() => setBootStep(2), 1400));
+    // Step 2: Show location
+    timeouts.push(setTimeout(() => setBootStep(2), 1300));
     
-    // Step 3: Web3_Stack loaded
-    timeouts.push(setTimeout(() => setBootStep(3), 1800));
+    // Step 3: Show focus
+    timeouts.push(setTimeout(() => setBootStep(3), 1700));
     
-    // Step 4: System ready
-    timeouts.push(setTimeout(() => setBootStep(4), 2200));
+    // Step 4: Show status
+    timeouts.push(setTimeout(() => setBootStep(4), 2100));
 
     // Step 5: Start Typing Main Content
-    timeouts.push(setTimeout(() => setBootStep(5), 2800));
+    timeouts.push(setTimeout(() => setBootStep(5), 2700));
     
     // Title typing duration: 30 chars * 40ms = 1200ms
-    // 2800 + 1200 = 4000ms
+    // 2700 + 1200 = 3900ms
     
     // Step 6: Start Typing Description
-    timeouts.push(setTimeout(() => setBootStep(6), 4100));
+    timeouts.push(setTimeout(() => setBootStep(6), 4000));
 
     // Description typing duration: ~153 chars * 20ms = 3060ms
-    // 4100 + 3060 = 7160ms
+    // 4000 + 3060 = 7060ms
 
     // Step 7: Show first button (view_projects)
-    timeouts.push(setTimeout(() => setBootStep(7), 7200));
+    timeouts.push(setTimeout(() => setBootStep(7), 7100));
 
     // Step 8: Show second button (contact_me)
-    timeouts.push(setTimeout(() => setBootStep(8), 7400));
+    timeouts.push(setTimeout(() => setBootStep(8), 7300));
 
     return () => timeouts.forEach(clearTimeout);
   }, []);
@@ -184,13 +184,13 @@ export default function Hero() {
                 
                 <div className="text-muted-foreground pl-6 space-y-1">
                   {bootStep >= 2 && (
-                    <div><span className="text-primary">✔</span> AI_Engine loaded</div>
+                    <div><span className="text-primary">location:</span> <span className="text-gray-400">Singapore 🇸🇬</span></div>
                   )}
                   {bootStep >= 3 && (
-                    <div><span className="text-primary">✔</span> Web3_Stack loaded</div>
+                    <div><span className="text-primary">focus:</span> <span className="text-gray-400">AI · Web3 · Full-Stack</span></div>
                   )}
                   {bootStep >= 4 && (
-                    <div className="text-primary">✔ System ready.</div>
+                    <div><span className="text-primary">status:</span> <span className="text-green-400">Open to opportunities ✨</span></div>
                   )}
                 </div>
               </div>
