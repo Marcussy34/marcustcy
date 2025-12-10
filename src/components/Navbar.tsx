@@ -16,20 +16,45 @@ const navLinks = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 50);
+      // Show navbar when scrolled down even slightly (past 20px)
+      if (scrollY > 20) {
+        setShowNavbar(true);
+      } else {
+        setShowNavbar(false);
+      }
     };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      // Show navbar when mouse is near top (within 100px)
+      if (e.clientY < 100) {
+        setShowNavbar(true);
+      } else if (window.scrollY <= 20) {
+        // Only hide if we're at the top and mouse moved away
+        setShowNavbar(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("mousemove", handleMouseMove);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
   return (
     <header
       className={cn(
-        "fixed top-0 w-full z-50 transition-all duration-300 border-b border-transparent",
-        scrolled ? "bg-background/80 backdrop-blur-md border-border py-4" : "bg-transparent py-6"
+        "fixed top-0 w-full z-50 transition-all duration-300 bg-background/70 backdrop-blur-md border-b border-border",
+        scrolled ? "py-4 shadow-lg shadow-primary/5" : "py-6",
+        showNavbar ? "translate-y-0" : "-translate-y-full"
       )}
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
