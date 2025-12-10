@@ -133,14 +133,14 @@ export default function Hero() {
           variant="square"
           pixelSize={12}
           color="#22c55e" // Terminal Green
-          patternScale={4}
-          patternDensity={1.5}
+          patternScale={10}
+          patternDensity={1}
           pixelSizeJitter={0.2}
           enableRipples={true}
           rippleSpeed={0.5}
           rippleThickness={0.05}
           rippleIntensityScale={2}
-          speed={0.3}
+          speed={1}
           edgeFade={0.1}
           transparent={true}
         />

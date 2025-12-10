@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
@@ -24,6 +25,47 @@ const sectionVariants = {
 };
 
 export default function Home() {
+  // Scroll restoration - save and restore scroll position on refresh
+  useEffect(() => {
+    // Restore scroll position after page loads
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    if (savedScrollPosition) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        window.scrollTo(0, parseInt(savedScrollPosition, 10));
+      });
+    }
+
+    // Save scroll position periodically
+    const handleScroll = () => {
+      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+    };
+
+    // Save on scroll
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Save before page unload
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Clear scroll position on new navigation (not refresh)
+    const handleNavigation = () => {
+      // Only clear if we're navigating, not refreshing
+      if (performance.navigation.type !== 1) {
+        sessionStorage.removeItem('scrollPosition');
+      }
+    };
+    window.addEventListener('load', handleNavigation);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener('load', handleNavigation);
+    };
+  }, []);
+
   return (
     <main className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-white">
       <Navbar />
