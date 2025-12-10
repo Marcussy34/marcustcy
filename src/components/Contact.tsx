@@ -53,7 +53,7 @@ export default function Contact() {
             <Github size={24} />
           </a>
           <a
-            href="https://www.linkedin.com/in/marcus-tan-chi-yau-7a6a4b21b/"
+            href="https://www.linkedin.com/in/marcus-tan-8846ba271/"
             target="_blank"
             rel="noopener noreferrer"
             className="p-3 border border-border hover:border-primary hover:text-primary transition-all hover:-translate-y-1"
