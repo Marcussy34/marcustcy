@@ -118,15 +118,19 @@ export default function Home() {
         {showCurtain && (
           <motion.div
             className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
-            initial={{ clipPath: "circle(100% at 50% 50%)", opacity: 1 }}
-            exit={{ clipPath: "circle(0% at 50% 50%)", opacity: 0 }}
+            initial={{ clipPath: "circle(100% at 50% 50%)" }}
+            exit={{ clipPath: "circle(0% at 50% 50%)" }}
             transition={{
               duration: 1,
               ease: [0.65, 0, 0.35, 1],
             }}
           >
-            {/* Boot Sequence Text */}
-            <div className="font-mono text-sm md:text-base space-y-2 text-left max-w-md px-6">
+            {/* Boot Sequence Text - fades out as circle closes */}
+            <motion.div 
+              className="font-mono text-sm md:text-base space-y-2 text-left max-w-md px-6"
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.53, delay: 0.4, ease: "easeOut" }}
+            >
               {bootStep >= 1 && (
                 <motion.div 
                   initial={{ opacity: 0 }} 
@@ -166,7 +170,7 @@ export default function Home() {
               {bootStep < 4 && (
                 <span className="text-primary animate-pulse">_</span>
               )}
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
