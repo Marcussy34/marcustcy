@@ -24,7 +24,7 @@ const achievements = [
     order: 1,
   },
   {
-    prize: "2x 1st Place, Flow & Hedera Track",
+    prize: "1st Place Flow Track, 1st Place Hedera Track",
     event: "ETHGlobal India 2025",
     project: "Dhal Way",
     description: "One of ETHGlobal's largest physical event. Won among 1,600 hackers from 25 countries.",
