@@ -106,12 +106,7 @@ export default function Hero() {
     };
   }, []);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [bootStep, initText, text, descriptionText]);
+
 
   // Helper to highlight "Marcus Tan" in the description
   const renderDescription = () => {
@@ -174,7 +169,7 @@ export default function Hero() {
             {/* Terminal Content */}
             <div 
               ref={scrollRef}
-              className="p-6 md:p-10 font-mono text-sm md:text-base space-y-6 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent"
+              className="p-6 md:p-10 font-mono text-sm md:text-base space-y-6 flex-1 overflow-hidden"
             >
               <div className="space-y-2">
                 {bootStep >= 1 && (
