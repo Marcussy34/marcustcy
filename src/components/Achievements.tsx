@@ -6,7 +6,7 @@ import { Trophy, Award, Star, ChevronDown, ChevronUp } from "lucide-react";
 // Achievements array with placement order for sorting
 const achievements = [
   {
-    prize: "1st Place & 4 Tracks Winner",
+    prize: "Grand Champion (1st Place) & 4 Tracks Winner",
     event: "BUIDL AI Hackathon 2025 (Seoul)",
     project: "CureMeBaby",
     description: "Champion in international hackathon for AI-driven, privacy-first mental health assistant.",
@@ -15,7 +15,7 @@ const achievements = [
     order: 1, // 1st place
   },
   {
-    prize: "1st Place, Celo Track",
+    prize: "1st Place & Finalist, Celo Track",
     event: "TOKEN2049 Origins Hackathon 2025 (Singapore)",
     project: "LeftAI",
     description: "Top 5 Finalist overall. Selected from 800+ applicants globally.",
@@ -24,7 +24,7 @@ const achievements = [
     order: 1,
   },
   {
-    prize: "1st Place, Flow & Hedera Track",
+    prize: "2x 1st Place, Flow & Hedera Track",
     event: "ETHGlobal India 2025",
     project: "Dhal Way",
     description: "Won among 1,600 hackers from 25 countries.",
@@ -42,7 +42,7 @@ const achievements = [
     order: 1,
   },
   {
-    prize: "1st Place, AI Track",
+    prize: "1st Place & Finalist, AI Track",
     event: "ETHTokyo 2025",
     project: "Toku Kaigan",
     description: "Won 1st Place in Actually Intelligent Track & Finalist.",
@@ -78,7 +78,7 @@ const achievements = [
     order: 3, // 3rd place
   },
   {
-    prize: "Finalist & 4 Tracks Winner",
+    prize: "Finalist & 4 Tracks Winner (2nd & 3rd Places)",
     event: "ETHKL 2024 (Kuala Lumpur)",
     project: "JustETH",
     description: "Placed among Top 5 teams. Won IP-C Ethereum Fusion and WorldID prizes.",

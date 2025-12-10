@@ -16,7 +16,7 @@ export default function Hero() {
   
   const fullInitText = "whoami --verbose";
   const fullText = "$ compose dApps & AI solutions";
-  const fullDescription = "I'm Marcus Tan. Full Stack Developer / AI Engineer / Web3 Enthusiast. I specialize in building Web Applications, AI applications and Decentralized Applications (dApps).";
+  const fullDescription = "I'm Marcus Tan. CS Graduate (AI & Cybersecurity) from Taylor's University. I specialize in building AI applications, Web3 dApps, and Full-Stack solutions.";
 
   // Boot Sequence Animation
   useEffect(() => {
@@ -184,13 +184,13 @@ export default function Hero() {
                 
                 <div className="text-muted-foreground pl-6 space-y-1">
                   {bootStep >= 2 && (
-                    <div><span className="text-primary">location:</span> <span className="text-gray-400">Singapore 🇸🇬</span></div>
+                    <div><span className="text-primary">location:</span> <span className="text-gray-400">Subang Jaya, Malaysia 🇲🇾</span></div>
                   )}
                   {bootStep >= 3 && (
                     <div><span className="text-primary">focus:</span> <span className="text-gray-400">AI · Web3 · Full-Stack</span></div>
                   )}
                   {bootStep >= 4 && (
-                    <div><span className="text-primary">status:</span> <span className="text-green-400">Open to opportunities ✨</span></div>
+                    <div><span className="text-primary">status:</span> <span className="text-green-400">Full-time building 🚀</span></div>
                   )}
                 </div>
               </div>

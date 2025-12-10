@@ -6,11 +6,12 @@ import { Terminal, Github, Linkedin, Mail, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "~/about", href: "#about" },
-  { name: "~/projects", href: "#projects" },
-  { name: "~/achievements", href: "#achievements" },
-  { name: "~/experience", href: "#experience" },
-  { name: "~/contact", href: "#contact" },
+  { name: "about", href: "#about" },
+  { name: "projects", href: "#projects" },
+  { name: "achievements", href: "#achievements" },
+  { name: "experience", href: "#experience" },
+  { name: "contact", href: "#contact" },
+  { name: "cv", href: "/cv" },
 ];
 
 export default function Navbar() {

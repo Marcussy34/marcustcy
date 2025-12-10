@@ -6,24 +6,17 @@ import { ChevronRight } from "lucide-react";
 const experience = [
   {
     id: "01",
-    role: "AI Engineer",
-    company: "TechCorp Inc.",
-    period: "2023 - Present",
-    description: "Leading the development of autonomous agents and LLM-powered applications. Optimized inference latency by 40%.",
+    role: "Tech Generalist Intern",
+    company: "ALPHV Technologies",
+    period: "Jan 2025 - Apr 2025",
+    description: "Pioneered and delivered a tested automation framework prototype for document processing. Conducted strategic research on implementing a secure, in-house LLM. Oversaw website maintenance for Jobs By Developer Kaki.",
   },
   {
     id: "02",
-    role: "Blockchain Developer",
-    company: "DeFi Protocol",
-    period: "2022 - 2023",
-    description: "Architected smart contracts for a cross-chain bridge securing over $10M TVL. Audited and deployed on Mainnet.",
-  },
-  {
-    id: "03",
-    role: "Full Stack Developer",
-    company: "Web3 Startup",
-    period: "2021 - 2022",
-    description: "Built the frontend and backend for a decentralized identity platform using Next.js and Ethereum.",
+    role: "Math Tuition Teacher",
+    company: "A+ Home Tuition Malaysia (Part-time)",
+    period: "Mar 2024 - Mar 2025",
+    description: "Delivered personalized SPM mathematics tutoring, creating tailored lesson plans to strengthen student problem-solving abilities and achieve target grades.",
   },
 ];
 
