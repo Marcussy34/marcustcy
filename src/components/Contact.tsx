@@ -1,17 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, Twitter, Terminal } from "lucide-react";
 
 export default function Contact() {
   return (
     <footer id="contact" className="py-24 relative border-t border-border bg-black">
       <div className="container mx-auto px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <div
           className="max-w-2xl mx-auto mb-12"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-muted border border-border rounded mb-8">
@@ -33,7 +28,7 @@ export default function Contact() {
             <Mail size={20} />
             Send Message
           </a>
-        </motion.div>
+        </div>
 
         <div className="flex justify-center gap-6 mb-12">
           <a

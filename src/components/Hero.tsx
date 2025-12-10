@@ -1,63 +1,166 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Terminal, ChevronRight, Mail } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import PixelBlast from "./PixelBlast";
 
 export default function Hero() {
   const [text, setText] = useState("");
+  const [initText, setInitText] = useState("");
+  const [descriptionText, setDescriptionText] = useState("");
   const [bootStep, setBootStep] = useState(0);
-  const fullText = "Building the Intelligent Future...";
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const initIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const titleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const descIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const fullInitText = "init portfolio.exe";
+  const fullText = "$ compose dApps & AI solutions";
+  const fullDescription = "I'm Marcus Tan. Full Stack Developer / AI Engineer / Web3 Enthusiast. I specialize in building Web Applications, AI applications and Decentralized Applications (dApps).";
 
   // Boot Sequence Animation
   useEffect(() => {
     const timeouts: NodeJS.Timeout[] = [];
 
-    // Step 1: init portfolio.exe
-    timeouts.push(setTimeout(() => setBootStep(1), 500));
-    // Step 2: Loading modules...
-    timeouts.push(setTimeout(() => setBootStep(2), 1200));
-    // Step 3: AI_Agents loaded
-    timeouts.push(setTimeout(() => setBootStep(3), 1600));
-    // Step 4: Blockchain_Protocols loaded
-    timeouts.push(setTimeout(() => setBootStep(4), 2000));
-    // Step 5: Cybersecurity_Matrix loaded
-    timeouts.push(setTimeout(() => setBootStep(5), 2400));
-    // Step 6: Show Main Content
-    timeouts.push(setTimeout(() => setBootStep(6), 2800));
+    // Step 1: Start typing "init portfolio.exe"
+    timeouts.push(setTimeout(() => setBootStep(1), 300));
+    
+    // Init typing duration: 18 chars * 50ms = 900ms
+    // 300 + 900 = 1200ms
+    
+    // Step 2: AI_Engine loaded
+    timeouts.push(setTimeout(() => setBootStep(2), 1400));
+    
+    // Step 3: Web3_Stack loaded
+    timeouts.push(setTimeout(() => setBootStep(3), 1800));
+    
+    // Step 4: System ready
+    timeouts.push(setTimeout(() => setBootStep(4), 2200));
+
+    // Step 5: Start Typing Main Content
+    timeouts.push(setTimeout(() => setBootStep(5), 2800));
+    
+    // Title typing duration: 30 chars * 40ms = 1200ms
+    // 2800 + 1200 = 4000ms
+    
+    // Step 6: Start Typing Description
+    timeouts.push(setTimeout(() => setBootStep(6), 4100));
+
+    // Description typing duration: ~153 chars * 20ms = 3060ms
+    // 4100 + 3060 = 7160ms
+
+    // Step 7: Show first button (view_projects)
+    timeouts.push(setTimeout(() => setBootStep(7), 7200));
+
+    // Step 8: Show second button (contact_me)
+    timeouts.push(setTimeout(() => setBootStep(8), 7400));
 
     return () => timeouts.forEach(clearTimeout);
   }, []);
 
-  // Typing Effect (Only starts after boot sequence)
+  // Typing Logic
   useEffect(() => {
-    if (bootStep < 6) return;
+    // Start Init Command Typing
+    if (bootStep >= 1 && !initIntervalRef.current) {
+      let i = 0;
+      initIntervalRef.current = setInterval(() => {
+        setInitText(fullInitText.slice(0, i + 1));
+        i++;
+        if (i > fullInitText.length) {
+          if (initIntervalRef.current) clearInterval(initIntervalRef.current);
+        }
+      }, 50);
+    }
 
-    let i = 0;
-    const interval = setInterval(() => {
-      setText(fullText.slice(0, i + 1));
-      i++;
-      if (i > fullText.length) clearInterval(interval);
-    }, 50); // Faster typing
-    return () => clearInterval(interval);
+    // Start Title Typing
+    if (bootStep >= 5 && !titleIntervalRef.current) {
+      let i = 0;
+      titleIntervalRef.current = setInterval(() => {
+        setText(fullText.slice(0, i + 1));
+        i++;
+        if (i > fullText.length) {
+          if (titleIntervalRef.current) clearInterval(titleIntervalRef.current);
+        }
+      }, 40);
+    }
+
+    // Start Description Typing
+    if (bootStep >= 6 && !descIntervalRef.current) {
+      let i = 0;
+      descIntervalRef.current = setInterval(() => {
+        setDescriptionText(fullDescription.slice(0, i + 1));
+        i++;
+        if (i > fullDescription.length) {
+          if (descIntervalRef.current) clearInterval(descIntervalRef.current);
+        }
+      }, 20);
+    }
   }, [bootStep]);
+
+  // Cleanup intervals on unmount
+  useEffect(() => {
+    return () => {
+      if (initIntervalRef.current) clearInterval(initIntervalRef.current);
+      if (titleIntervalRef.current) clearInterval(titleIntervalRef.current);
+      if (descIntervalRef.current) clearInterval(descIntervalRef.current);
+    };
+  }, []);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [bootStep, initText, text, descriptionText]);
+
+  // Helper to highlight "Marcus Tan" in the description
+  const renderDescription = () => {
+    if (!descriptionText) return null;
+    
+    // Split by "Marcus Tan" to highlight it
+    const parts = descriptionText.split("Marcus Tan");
+    if (parts.length === 1) return <span className="text-gray-400">{parts[0]}</span>;
+    
+    return (
+      <>
+        <span className="text-gray-400">{parts[0]}</span>
+        <span className="text-primary">Marcus Tan</span>
+        <span className="text-gray-400">{parts[1]}</span>
+      </>
+    );
+  };
 
   return (
     <section className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
-      {/* Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#262626_1px,transparent_1px),linear-gradient(to_bottom,#262626_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-20 pointer-events-none" />
+      {/* PixelBlast Background */}
+      <div className="absolute inset-0 z-0">
+        <PixelBlast
+          variant="square"
+          pixelSize={12}
+          color="#22c55e" // Terminal Green
+          patternScale={4}
+          patternDensity={1.5}
+          pixelSizeJitter={0.2}
+          enableRipples={true}
+          rippleSpeed={0.5}
+          rippleThickness={0.05}
+          rippleIntensityScale={2}
+          speed={0.3}
+          edgeFade={0.1}
+          transparent={true}
+        />
+      </div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Terminal Window */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="terminal-card rounded-lg overflow-hidden shadow-2xl min-h-[500px] flex flex-col"
+          <div
+            className={`terminal-card rounded-lg overflow-hidden shadow-2xl h-[500px] flex flex-col transition-all duration-500 ease-out transform ${
+              bootStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
           >
             {/* Terminal Header */}
-            <div className="bg-muted px-4 py-2 flex items-center gap-2 border-b border-border">
+            <div className="bg-muted px-4 py-2 flex items-center gap-2 border-b border-border shrink-0">
               <div className="flex gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500/50" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
@@ -69,72 +172,71 @@ export default function Hero() {
             </div>
 
             {/* Terminal Content */}
-            <div className="p-6 md:p-10 font-mono text-sm md:text-base space-y-6 flex-1">
+            <div 
+              ref={scrollRef}
+              className="p-6 md:p-10 font-mono text-sm md:text-base space-y-6 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent"
+            >
               <div className="space-y-2">
                 {bootStep >= 1 && (
                   <div className="flex items-center gap-2 text-primary">
                     <ChevronRight size={16} />
-                    <span className="text-white">init portfolio.exe</span>
+                    <span className="text-white">
+                      {initText}
+                      {bootStep < 2 && <span className="cursor-blink text-primary">_</span>}
+                    </span>
                   </div>
                 )}
                 
                 <div className="text-muted-foreground pl-6 space-y-1">
-                  {bootStep >= 2 && <div>Loading modules...</div>}
+                  {bootStep >= 2 && (
+                    <div><span className="text-primary">✔</span> AI_Engine loaded</div>
+                  )}
                   {bootStep >= 3 && (
-                    <div><span className="text-primary">✔</span> AI_Agents loaded</div>
+                    <div><span className="text-primary">✔</span> Web3_Stack loaded</div>
                   )}
                   {bootStep >= 4 && (
-                    <div><span className="text-primary">✔</span> Blockchain_Protocols loaded</div>
-                  )}
-                  {bootStep >= 5 && (
-                    <div><span className="text-primary">✔</span> Cybersecurity_Matrix loaded</div>
+                    <div className="text-primary">✔ System ready.</div>
                   )}
                 </div>
               </div>
 
-              {bootStep >= 6 && (
-                <motion.div 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="space-y-4 py-4"
-                >
-                  <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight min-h-[1.2em]">
-                    {text}<span className="cursor-blink text-primary">_</span>
-                  </h1>
-                  <motion.p 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="text-gray-400 max-w-2xl leading-relaxed"
-                  >
-                    I'm <span className="text-primary">Marcus Tan</span>. I engineer decentralized systems and autonomous agents that bridge the gap between Web2 and Web3.
-                  </motion.p>
+              {bootStep >= 5 && (
+                <div className="space-y-4 py-4">
+                  <div className="text-base md:text-lg text-white font-mono tracking-tight">
+                    <span className="text-primary mr-2">➜</span>
+                    {text}
+                    {bootStep < 6 && <span className="cursor-blink text-primary">_</span>}
+                  </div>
+                  
+                  {bootStep >= 6 && (
+                    <div className="pl-6 text-gray-400 max-w-2xl leading-relaxed font-mono">
+                      {renderDescription()}
+                      {bootStep < 7 && <span className="cursor-blink text-primary">_</span>}
+                    </div>
+                  )}
 
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
-                    className="flex flex-col sm:flex-row gap-4 pt-4"
-                  >
-                    <a
-                      href="#projects"
-                      className="px-6 py-3 bg-primary text-black font-bold hover:bg-accent transition-colors flex items-center gap-2 w-fit"
-                    >
-                      <Terminal size={18} />
-                      ./view_projects.sh
-                    </a>
-                    <a
-                      href="#contact"
-                      className="px-6 py-3 border border-border text-gray-300 hover:border-primary hover:text-primary transition-colors flex items-center gap-2 w-fit"
-                    >
-                      <Mail size={18} />
-                      ./contact_me.sh
-                    </a>
-                  </motion.div>
-                </motion.div>
+                  <div className="space-y-2 pt-4 pl-6">
+                    {bootStep >= 7 && (
+                      <a
+                        href="#projects"
+                        className="block text-gray-400 hover:text-primary transition-colors group"
+                      >
+                        <span className="text-primary">$</span> ./view_projects.sh <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">← click to run</span>
+                      </a>
+                    )}
+                    {bootStep >= 8 && (
+                      <a
+                        href="#contact"
+                        className="block text-gray-400 hover:text-primary transition-colors group"
+                      >
+                        <span className="text-primary">$</span> ./contact_me.sh <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">← click to run</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

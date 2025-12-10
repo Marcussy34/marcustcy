@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Trophy, Award, Star } from "lucide-react";
 
 const achievements = [
@@ -82,13 +81,7 @@ export default function Achievements() {
   return (
     <section id="achievements" className="py-24 relative border-t border-border bg-black/50">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
+        <div className="mb-16">
           <div className="flex items-center gap-2 text-primary mb-2">
             <Trophy size={20} />
             <span className="text-sm font-mono">~/achievements</span>
@@ -96,17 +89,13 @@ export default function Achievements() {
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
             <span className="text-primary">const</span> <span className="text-white">trophyCabinet</span> = [...]
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {achievements.map((item, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="terminal-card p-6 flex items-start gap-4 group"
+              className="terminal-card p-6 flex items-start gap-4 group hover:bg-white/5 transition-colors duration-300"
             >
               <div className={`p-3 rounded bg-muted border border-border ${item.color} group-hover:text-white group-hover:bg-primary/20 transition-colors`}>
                 <item.icon size={24} />
@@ -127,7 +116,7 @@ export default function Achievements() {
                   {item.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

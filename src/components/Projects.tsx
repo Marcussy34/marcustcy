@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { ExternalLink, Github, Terminal, Code } from "lucide-react";
 
 const projects = [
@@ -58,11 +58,7 @@ export default function Projects() {
   return (
     <section id="projects" className="py-24 relative border-t border-border">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+        <div
           className="mb-16"
         >
           <div className="flex items-center gap-2 text-primary mb-2">
@@ -75,16 +71,12 @@ export default function Projects() {
           <p className="text-gray-400 max-w-2xl text-lg font-mono">
             // A collection of award-winning hackathon projects and innovative solutions.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="terminal-card group p-6 relative"
             >
               <div className="absolute top-4 right-4 text-xs text-muted-foreground font-mono">
@@ -128,7 +120,7 @@ export default function Projects() {
                   <span>live_demo</span>
                 </a>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
