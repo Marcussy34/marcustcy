@@ -50,6 +50,8 @@
 html {
   overflow-y: auto;
   overflow-x: hidden;
+  /* Smooth scroll for anchor links */
+  scroll-behavior: smooth;
 }
 
 body {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Trophy, Award, Star, ChevronDown, ChevronUp } from "lucide-react";
 
 // Achievements array with placement order for sorting
@@ -94,6 +94,118 @@ const sortedAchievements = [...achievements].sort((a, b) => a.order - b.order);
 // Number of achievements to show initially
 const INITIAL_DISPLAY_COUNT = 5;
 
+// Individual achievement card with scroll-based animation
+interface AchievementCardProps {
+  item: typeof achievements[0];
+  index: number;
+}
+
+function AchievementCard({ item, index }: AchievementCardProps) {
+  const [isVisible, setIsVisible] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  
+  // Each card observes itself for scroll-based reveal
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Only animate once
+        }
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' } // Trigger slightly before fully visible
+    );
+    
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // Alternating left/right direction
+  const isFromLeft = index % 2 === 0;
+  
+  const animationStyle = {
+    opacity: isVisible ? 1 : 0,
+    transform: isVisible 
+      ? 'translateX(0)' 
+      : `translateX(${isFromLeft ? '-50px' : '50px'})`,
+    transition: 'opacity 0.8s ease-out, transform 1s ease-out',
+  };
+  
+  return (
+    <div
+      ref={cardRef}
+      style={animationStyle}
+      className="terminal-card p-6 flex items-start gap-4 group hover:bg-white/5 transition-colors duration-300"
+    >
+      <div className={`p-3 rounded bg-muted border border-border ${item.color} group-hover:text-white group-hover:bg-primary/20 transition-colors`}>
+        <item.icon size={24} />
+      </div>
+      
+      <div className="flex-1">
+        <h3 className={`text-xl font-bold mb-1 ${item.color} font-mono`}>
+          {item.prize}
+        </h3>
+        <h4 className="text-white font-bold mb-2 text-lg">
+          {item.event}
+        </h4>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-xs font-mono text-muted-foreground">Project:</span>
+          <span className="text-sm font-mono text-primary">{item.project}</span>
+        </div>
+        <p className="text-gray-400 text-sm leading-relaxed font-mono">
+          {item.description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// Animated button component
+function AnimatedButton({ children, onClick, isVisible }: { children: React.ReactNode; onClick: () => void; isVisible: boolean }) {
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const [show, setShow] = useState(false);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShow(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    
+    if (buttonRef.current) {
+      observer.observe(buttonRef.current);
+    }
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  return (
+    <div 
+      ref={buttonRef}
+      className="mt-8 flex justify-center"
+      style={{
+        opacity: show ? 1 : 0,
+        transform: show ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
+      }}
+    >
+      <button
+        onClick={onClick}
+        className="flex items-center gap-2 px-6 py-3 bg-muted border border-border rounded-lg text-primary font-mono text-sm hover:bg-primary/10 hover:border-primary transition-colors duration-300"
+      >
+        {children}
+      </button>
+    </div>
+  );
+}
+
 export default function Achievements() {
   const [showAll, setShowAll] = useState(false);
   
@@ -126,53 +238,25 @@ export default function Achievements() {
         {/* Single column layout - one achievement per row */}
         <div className="flex flex-col gap-4">
           {displayedAchievements.map((item, index) => (
-            <div
-              key={index}
-              className="terminal-card p-6 flex items-start gap-4 group hover:bg-white/5 transition-colors duration-300"
-            >
-              <div className={`p-3 rounded bg-muted border border-border ${item.color} group-hover:text-white group-hover:bg-primary/20 transition-colors`}>
-                <item.icon size={24} />
-              </div>
-              
-              <div className="flex-1">
-                <h3 className={`text-xl font-bold mb-1 ${item.color} font-mono`}>
-                  {item.prize}
-                </h3>
-                <h4 className="text-white font-bold mb-2 text-lg">
-                  {item.event}
-                </h4>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xs font-mono text-muted-foreground">Project:</span>
-                  <span className="text-sm font-mono text-primary">{item.project}</span>
-                </div>
-                <p className="text-gray-400 text-sm leading-relaxed font-mono">
-                  {item.description}
-                </p>
-              </div>
-            </div>
+            <AchievementCard key={index} item={item} index={index} />
           ))}
         </div>
 
         {/* Show More / Show Less Button */}
         {totalCount > INITIAL_DISPLAY_COUNT && (
-          <div className="mt-8 flex justify-center">
-            <button
-              onClick={() => setShowAll(!showAll)}
-              className="flex items-center gap-2 px-6 py-3 bg-muted border border-border rounded-lg text-primary font-mono text-sm hover:bg-primary/10 hover:border-primary transition-colors duration-300"
-            >
-              {showAll ? (
-                <>
-                  <ChevronUp size={18} />
-                  Show Less
-                </>
-              ) : (
-                <>
-                  <ChevronDown size={18} />
-                  Show More ({totalCount - INITIAL_DISPLAY_COUNT} more)
-                </>
-              )}
-            </button>
-          </div>
+          <AnimatedButton onClick={() => setShowAll(!showAll)} isVisible>
+            {showAll ? (
+              <>
+                <ChevronUp size={18} />
+                Show Less
+              </>
+            ) : (
+              <>
+                <ChevronDown size={18} />
+                Show More ({totalCount - INITIAL_DISPLAY_COUNT} more)
+              </>
+            )}
+          </AnimatedButton>
         )}
       </div>
     </section>

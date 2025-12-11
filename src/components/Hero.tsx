@@ -1,22 +1,21 @@
 "use client";
 
-import { Terminal, ChevronRight, Mail } from "lucide-react";
+import { Terminal, ChevronRight, Mail, Loader2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import PixelBlast from "./PixelBlast";
 
 export default function Hero() {
   const [text, setText] = useState("");
   const [initText, setInitText] = useState("");
-  const [descriptionText, setDescriptionText] = useState("");
   const [bootStep, setBootStep] = useState(0);
+  const [showInstalling, setShowInstalling] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const initIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const titleIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const descIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const fullInitText = "whoami --verbose";
-  const fullText = "$ compose dApps & AI solutions";
-  const fullDescription = "I'm Marcus Tan. CS Graduate (AI & Cybersecurity) from Taylor's University. I specialize in building AI applications, Web3 dApps, and Full-Stack solutions.";
+  const fullText = "$ npm install marcus-tan";
 
   // Boot Sequence Animation
   useEffect(() => {
@@ -24,9 +23,6 @@ export default function Hero() {
 
     // Step 1: Start typing "whoami --verbose"
     timeouts.push(setTimeout(() => setBootStep(1), 300));
-    
-    // Init typing duration: 16 chars * 50ms = 800ms
-    // 300 + 800 = 1100ms
     
     // Step 2: Show location
     timeouts.push(setTimeout(() => setBootStep(2), 1300));
@@ -37,23 +33,30 @@ export default function Hero() {
     // Step 4: Show status
     timeouts.push(setTimeout(() => setBootStep(4), 2100));
 
-    // Step 5: Start Typing Main Content
+    // Step 5: Start Typing npm install command
     timeouts.push(setTimeout(() => setBootStep(5), 2700));
     
-    // Title typing duration: 30 chars * 40ms = 1200ms
-    // 2700 + 1200 = 3900ms
+    // Command typing duration: ~24 chars * 40ms = 960ms
+    // 2700 + 960 = 3660ms
     
-    // Step 6: Start Typing Description
-    timeouts.push(setTimeout(() => setBootStep(6), 4000));
+    // Step 6: Show "Installing..." after command finishes typing
+    timeouts.push(setTimeout(() => {
+      setShowInstalling(true);
+      setBootStep(6);
+    }, 3800));
+    
+    // Step 7: Show npm output (instant, no typing) + hide installing
+    timeouts.push(setTimeout(() => {
+      setShowInstalling(false);
+      setShowOutput(true);
+      setBootStep(7);
+    }, 4400)); // Faster: 600ms installing duration instead of 1000ms
 
-    // Description typing duration: ~153 chars * 20ms = 3060ms
-    // 4000 + 3060 = 7060ms
+    // Step 8: Show first button (view_projects)
+    timeouts.push(setTimeout(() => setBootStep(8), 4800));
 
-    // Step 7: Show first button (view_projects)
-    timeouts.push(setTimeout(() => setBootStep(7), 7100));
-
-    // Step 8: Show second button (contact_me)
-    timeouts.push(setTimeout(() => setBootStep(8), 7300));
+    // Step 9: Show second button (contact_me)
+    timeouts.push(setTimeout(() => setBootStep(9), 5000));
 
     return () => timeouts.forEach(clearTimeout);
   }, []);
@@ -83,18 +86,6 @@ export default function Hero() {
         }
       }, 40);
     }
-
-    // Start Description Typing
-    if (bootStep >= 6 && !descIntervalRef.current) {
-      let i = 0;
-      descIntervalRef.current = setInterval(() => {
-        setDescriptionText(fullDescription.slice(0, i + 1));
-        i++;
-        if (i > fullDescription.length) {
-          if (descIntervalRef.current) clearInterval(descIntervalRef.current);
-        }
-      }, 20);
-    }
   }, [bootStep]);
 
   // Cleanup intervals on unmount
@@ -102,31 +93,45 @@ export default function Hero() {
     return () => {
       if (initIntervalRef.current) clearInterval(initIntervalRef.current);
       if (titleIntervalRef.current) clearInterval(titleIntervalRef.current);
-      if (descIntervalRef.current) clearInterval(descIntervalRef.current);
     };
   }, []);
 
-
-
-  // Helper to highlight "Marcus Tan" in the description
-  const renderDescription = () => {
-    if (!descriptionText) return null;
-    
-    // Split by "Marcus Tan" to highlight it
-    const parts = descriptionText.split("Marcus Tan");
-    if (parts.length === 1) return <span className="text-gray-400">{parts[0]}</span>;
-    
+  // Render npm install output (appears all at once, like real terminal)
+  const renderNpmOutput = () => {
     return (
-      <>
-        <span className="text-gray-400">{parts[0]}</span>
-        <span className="text-primary">Marcus Tan</span>
-        <span className="text-gray-400">{parts[1]}</span>
-      </>
+      <div 
+        className={`space-y-1 transition-opacity duration-300 ${showOutput ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <div className="text-gray-400">
+          <span className="text-gray-400">added </span>
+          <span className="text-white">3</span>
+          <span className="text-gray-400"> packages in </span>
+          <span className="text-white">612ms</span>
+        </div>
+        <div className="text-gray-500 text-xs mt-2 mb-1">
+          packages installed:
+        </div>
+        <div>
+          <span className="text-primary">+</span>{' '}
+          <span className="text-green-400">ai-applications</span>
+          <span className="text-gray-500">@latest</span>
+        </div>
+        <div>
+          <span className="text-primary">+</span>{' '}
+          <span className="text-green-400">web3-dapps</span>
+          <span className="text-gray-500">@latest</span>
+        </div>
+        <div>
+          <span className="text-primary">+</span>{' '}
+          <span className="text-green-400">full-stack-solutions</span>
+          <span className="text-gray-500">@latest</span>
+        </div>
+      </div>
     );
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+    <section id="about" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
       {/* PixelBlast Background */}
       <div className="absolute inset-0 z-0">
         <PixelBlast
@@ -203,28 +208,36 @@ export default function Hero() {
                     {bootStep < 6 && <span className="cursor-blink text-primary">_</span>}
                   </div>
                   
-                  {bootStep >= 6 && (
-                    <div className="pl-6 text-gray-400 max-w-2xl leading-relaxed font-mono">
-                      {renderDescription()}
-                      {bootStep < 7 && <span className="cursor-blink text-primary">_</span>}
+                  {/* Installing spinner - shows briefly while "loading" */}
+                  {showInstalling && (
+                    <div className="pl-6 text-gray-400 font-mono text-sm flex items-center gap-2">
+                      <Loader2 size={14} className="animate-spin text-primary" />
+                      <span>Installing packages...</span>
+                    </div>
+                  )}
+                  
+                  {/* npm output - appears all at once after "installing" */}
+                  {bootStep >= 7 && (
+                    <div className="pl-6 text-gray-400 max-w-2xl leading-relaxed font-mono text-sm">
+                      {renderNpmOutput()}
                     </div>
                   )}
 
                   <div className="space-y-2 pt-4 pl-6">
-                    {bootStep >= 7 && (
-                      <a
-                        href="#projects"
-                        className="block text-gray-400 hover:text-primary transition-colors group"
-                      >
-                        <span className="text-primary">$</span> ./view_projects.sh <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">← click to run</span>
-                      </a>
-                    )}
                     {bootStep >= 8 && (
                       <a
-                        href="#contact"
-                        className="block text-gray-400 hover:text-primary transition-colors group"
+                        href="#projects"
+                        className="block text-gray-400 hover:text-primary transition-colors"
                       >
-                        <span className="text-primary">$</span> ./contact_me.sh <span className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">← click to run</span>
+                        <span className="text-primary">$</span> ./view_projects.sh
+                      </a>
+                    )}
+                    {bootStep >= 9 && (
+                      <a
+                        href="#contact"
+                        className="block text-gray-400 hover:text-primary transition-colors"
+                      >
+                        <span className="text-primary">$</span> ./contact_me.sh
                       </a>
                     )}
                   </div>

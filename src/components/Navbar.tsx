@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { name: "about", href: "#about" },
-  { name: "projects", href: "#projects" },
   { name: "achievements", href: "#achievements" },
+  { name: "projects", href: "#projects" },
   { name: "experience", href: "#experience" },
   { name: "contact", href: "#contact" },
   { name: "cv", href: "/cv" },
@@ -18,6 +18,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(false);
+  // Track the currently active section based on scroll position
+  const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,6 +52,53 @@ export default function Navbar() {
     };
   }, []);
 
+  // Track active section based on scroll position
+  useEffect(() => {
+    // Get all section IDs from navLinks (excluding external links like /cv)
+    const sectionIds = navLinks
+      .filter((link) => link.href.startsWith("#"))
+      .map((link) => link.href.slice(1));
+
+    const handleScrollForSections = () => {
+      // Find which section is currently at the top of the viewport
+      let currentSection = "";
+      
+      // Check if we're at the bottom of the page
+      const isAtBottom = 
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100;
+      
+      // If at bottom, highlight the last section (contact)
+      if (isAtBottom) {
+        currentSection = sectionIds[sectionIds.length - 1]; // "contact"
+      } else {
+        for (const id of sectionIds) {
+          const element = document.getElementById(id);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            // Section is considered active if its top is within 150px of viewport top
+            // or if viewport is inside the section
+            if (rect.top <= 150 && rect.bottom > 150) {
+              currentSection = id;
+            }
+          }
+        }
+      }
+      
+      // Update state only if section changed
+      if (currentSection !== activeSection) {
+        setActiveSection(currentSection);
+      }
+    };
+
+    // Run once on mount and on every scroll
+    handleScrollForSections();
+    window.addEventListener("scroll", handleScrollForSections);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScrollForSections);
+    };
+  }, [activeSection]);
+
   return (
     <header
       className={cn(
@@ -67,15 +116,28 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-sm font-mono text-gray-400 hover:text-primary transition-colors"
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            // Check if this link's section is currently active
+            const isActive = link.href.startsWith("#") && activeSection === link.href.slice(1);
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "text-sm font-mono transition-all duration-200 relative",
+                  isActive
+                    ? "text-primary font-semibold"
+                    : "text-gray-400 hover:text-primary"
+                )}
+              >
+                {link.name}
+                {/* Green underline indicator for active section */}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
+                )}
+              </Link>
+            );
+          })}
           <div className="h-4 w-px bg-border" />
           <div className="flex items-center gap-4">
             <a href="https://github.com/Marcussy34" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
@@ -107,16 +169,25 @@ export default function Navbar() {
         )}
       >
         <nav className="flex flex-col p-6 gap-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-sm font-mono text-gray-400 hover:text-primary transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.name}
-            </Link>
-          ))}
+          {navLinks.map((link) => {
+            // Check if this link's section is currently active
+            const isActive = link.href.startsWith("#") && activeSection === link.href.slice(1);
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "text-sm font-mono transition-colors",
+                  isActive
+                    ? "text-primary font-semibold"
+                    : "text-gray-400 hover:text-primary"
+                )}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
           <div className="flex items-center gap-6 pt-4 border-t border-border">
             <a href="https://github.com/Marcussy34" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary transition-colors">
               <Github size={20} />

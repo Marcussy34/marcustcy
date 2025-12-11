@@ -2,11 +2,34 @@
 
 import { Download, FileText, ChevronLeft, Terminal } from "lucide-react";
 import Link from "next/link";
+import FaultyTerminal from "@/components/FaultyTerminal";
 
 export default function CVPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground py-12 px-6">
-      <div className="container mx-auto max-w-5xl">
+    <main className="min-h-screen bg-background text-foreground py-12 px-6 relative">
+      {/* FaultyTerminal Background */}
+      <div className="fixed inset-0 z-0">
+        <FaultyTerminal
+          scale={1.5}
+          gridMul={[2, 1]}
+          digitSize={1.2}
+          timeScale={0.5}
+          pause={false}
+          scanlineIntensity={0.3}
+          glitchAmount={0.5}
+          flickerAmount={0.5}
+          noiseAmp={0.8}
+          chromaticAberration={0}
+          dither={0}
+          curvature={0}
+          tint="#00ff88"
+          mouseReact={true}
+          mouseStrength={0.3}
+          pageLoadAnimation={true}
+          brightness={0.15}
+        />
+      </div>
+      <div className="container mx-auto max-w-5xl relative z-10">
         {/* Header */}
         <div className="mb-8">
           <Link
@@ -127,13 +150,7 @@ export default function CVPage() {
           </div>
         </div>
 
-        {/* Note about PDF */}
-        <div className="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded">
-          <p className="text-yellow-500 font-mono text-sm">
-            <span className="font-bold">Note:</span> To enable PDF download and preview, add your CV as{" "}
-            <code className="bg-black/30 px-2 py-1">public/marcus-tan-cv.pdf</code>
-          </p>
-        </div>
+
       </div>
     </main>
   );
