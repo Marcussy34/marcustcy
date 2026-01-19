@@ -22,6 +22,17 @@
   --color-card-foreground: var(--card-foreground);
 
   --color-border: var(--border);
+
+  --animate-shine: shine 1.5s infinite linear;
+  
+  @keyframes shine {
+    0% { transform: skewX(-25deg) translateX(-150%); }
+    100% { transform: skewX(-25deg) translateX(150%); }
+  }
+}
+
+.perspective-1000 {
+  perspective: 1000px;
 }
 
 :root {

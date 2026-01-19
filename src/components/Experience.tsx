@@ -90,7 +90,7 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
       className="relative pl-8 md:pl-12 group"
     >
       {/* Timeline Dot */}
-      <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 rounded-full bg-border group-hover:bg-primary transition-colors" />
+      <div className="absolute -left-[4px] top-2 z-30 w-2.5 h-2.5 rounded-full bg-black border border-muted-foreground group-hover:border-primary group-hover:bg-primary transition-colors shadow-[0_0_0_4px_black]" />
 
       <div className="terminal-card p-6 hover:bg-white/5 transition-colors duration-300">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
@@ -170,8 +170,13 @@ function AnimatedButton({ children, onClick }: { children: React.ReactNode; onCl
   );
 }
 
+import { motion, useScroll, useSpring } from "framer-motion";
+
+// ... (existing imports and experience data)
+
 export default function Experience() {
   const [showAll, setShowAll] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   // Number of experiences to show initially
   const INITIAL_DISPLAY_COUNT = 2;
@@ -182,12 +187,21 @@ export default function Experience() {
   
   const totalCount = experience.length;
 
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   return (
-    <section id="experience" className="py-24 relative border-t border-border bg-black/50">
+    <section id="experience" className="py-24 relative border-t border-border bg-black/50" ref={containerRef}>
       <div className="container mx-auto px-6">
-        <div
-          className="mb-16"
-        >
+        <div className="mb-16">
           <div className="flex items-center gap-2 text-primary mb-2">
             <ChevronRight size={20} />
             <span className="text-sm font-mono">~/experience</span>
@@ -200,10 +214,25 @@ export default function Experience() {
           </p>
         </div>
 
-        <div className="relative border-l border-border ml-3 md:ml-6 space-y-12">
-          {displayedExperience.map((item, index) => (
-            <ExperienceCard key={item.id} item={item} index={index} />
-          ))}
+        <div className="relative ml-3 md:ml-6">
+          {/* Animated Circuit Line Background (Empty Trace) */}
+          <div className="absolute left-[0px] top-2 bottom-0 w-[2px] bg-border" />
+          
+          {/* Animated Circuit Line Fill (Glowing) */}
+          <motion.div 
+            className="absolute left-[0px] top-2 w-[2px] bg-primary origin-top shadow-[0_0_10px_rgba(var(--primary-rgb),0.8)]"
+            style={{ 
+                height: "100%", 
+                scaleY,
+                zIndex: 10
+            }}
+          />
+
+          <div className="space-y-12 relative z-20">
+            {displayedExperience.map((item, index) => (
+              <ExperienceCard key={item.id} item={item} index={index} />
+            ))}
+          </div>
         </div>
 
         {/* Show More / Show Less Button */}

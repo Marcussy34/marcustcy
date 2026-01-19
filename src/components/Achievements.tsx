@@ -34,12 +34,12 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
           opacity: 1,
           x: 0,
           scale: 1,
-          ease: "power2.out", // Smooth easing for natural feel
+          ease: "power2.out", 
           scrollTrigger: {
             trigger: cardRef.current,
-            start: "top 95%",     // Start earlier
-            end: "top 40%",       // End later for longer animation range
-            scrub: 1.5,           // Higher scrub = smoother, less snappy
+            start: "top 95%",     
+            end: "top 40%",       
+            scrub: 1.5,           
           },
         }
       );
@@ -47,18 +47,54 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
     
     return () => ctx.revert();
   }, [index]);
+
+  // Determine glow color based on the item.color class (approximation)
+  const getGlowColor = (colorClass: string) => {
+      if (colorClass.includes("yellow")) return "rgba(234, 179, 8, 0.4)"; // Gold
+      if (colorClass.includes("gray")) return "rgba(156, 163, 175, 0.4)"; // Silver
+      if (colorClass.includes("orange")) return "rgba(249, 115, 22, 0.4)"; // Bronze
+      return "rgba(34, 197, 94, 0.4)"; // Default/Primary
+  };
+  
+  const glowColor = getGlowColor(item.color);
   
   return (
     <div
       ref={cardRef}
-      className="terminal-card p-6 flex items-start gap-4 group hover:bg-white/5 transition-colors duration-300"
+      className="terminal-card relative p-6 flex items-start gap-4 group hover:bg-white/5 transition-all duration-300 overflow-hidden"
+      style={{
+          boxShadow: `0 0 0 0 transparent`, 
+      }}
+      onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = `0 0 20px -5px ${glowColor}`;
+          e.currentTarget.style.borderColor = glowColor.replace('0.4)', '0.6)');
+      }}
+      onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = `0 0 0 0 transparent`;
+          e.currentTarget.style.borderColor = '';
+      }}
     >
-      <div className={`p-3 rounded bg-muted border border-border ${item.color} group-hover:text-white group-hover:bg-primary/20 transition-colors`}>
+      {/* Holographic Shine Overlay */}
+      <div 
+        className="absolute inset-0 translate-x-[-150%] group-hover:animate-shine z-0 pointer-events-none"
+        style={{
+            background: `linear-gradient(
+                90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.1) 20%, 
+                rgba(255, 255, 255, 0.2) 25%, 
+                transparent 50%
+            )`,
+            transform: 'skewX(-25deg) translateX(-150%)',
+        }}
+      />
+
+      <div className={`relative z-10 p-3 rounded bg-muted border border-border ${item.color} group-hover:text-white group-hover:bg-primary/20 transition-colors`}>
         <item.icon size={24} />
       </div>
       
-      <div className="flex-1">
-        <h3 className={`text-xl font-bold mb-1 ${item.color} font-mono`}>
+      <div className="relative z-10 flex-1">
+        <h3 className={`text-xl font-bold mb-1 ${item.color} font-mono`} style={{ textShadow: `0 0 10px ${glowColor}` }}>
           {item.prize}
         </h3>
         <h4 className="text-white font-bold mb-2 text-lg">
