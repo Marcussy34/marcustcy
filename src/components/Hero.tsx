@@ -3,6 +3,10 @@
 import { Terminal, ChevronRight, Mail, Loader2 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import PixelBlast from "./PixelBlast";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [text, setText] = useState("");
@@ -131,6 +135,34 @@ export default function Hero() {
       if (asciiIntervalRef.current) clearInterval(asciiIntervalRef.current);
     };
   }, []);
+  
+  // Scroll-away effect: pin the section and fade it out as user scrolls
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (!sectionRef.current || !contentRef.current) return;
+    
+    const ctx = gsap.context(() => {
+      // Pin the hero and fade it out as user scrolls
+      gsap.to(contentRef.current, {
+        opacity: 0,
+        scale: 0.85,
+        y: -100,
+        ease: "power1.in",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",         // Start immediately when hero reaches top of viewport
+          end: "bottom top",        // End when bottom of hero reaches top
+          scrub: 1,
+          pin: true,                // Pin the section in place
+          pinSpacing: false,        // Don't add extra space - next section overlaps
+        },
+      });
+    });
+    
+    return () => ctx.revert();
+  }, []);
 
   // Render npm install output (appears all at once, like real terminal)
   const renderNpmOutput = () => {
@@ -167,7 +199,14 @@ export default function Hero() {
   };
 
   return (
-    <section id="about" className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+    <section 
+      ref={sectionRef} 
+      id="about" 
+      className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden"
+      style={{ zIndex: 1 }}
+    >
+      {/* Content wrapper for scroll animation */}
+      <div ref={contentRef} className="w-full h-full absolute inset-0 flex items-center justify-center">
       {/* PixelBlast Background */}
       <div className="absolute inset-0 z-0">
         <PixelBlast
@@ -301,6 +340,7 @@ export default function Hero() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

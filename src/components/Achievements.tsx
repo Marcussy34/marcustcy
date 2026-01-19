@@ -94,7 +94,11 @@ export default function Achievements() {
   const totalCount = achievements.length;
 
   return (
-    <section id="achievements" className="py-24 relative border-t border-border bg-black/50">
+    <section 
+      id="achievements" 
+      className="py-24 relative border-t border-border bg-background"
+      style={{ zIndex: 10 }}
+    >
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
