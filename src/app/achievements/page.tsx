@@ -5,11 +5,16 @@ import { achievements } from "@/data/achievements";
 import Navbar from "@/components/Navbar";
 import { ArrowLeft, Calendar, Github, MapPin, Trophy, LayoutGrid, List as ListIcon } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function AchievementsPage() {
   const [filter, setFilter] = useState<"All" | "2025" | "2024">("All");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+
+  // Scroll to top when page loads
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const filteredAchievements = achievements.filter((item) => {
     if (filter === "All") return true;
