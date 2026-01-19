@@ -1,119 +1,28 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Trophy, Award, Star, ChevronDown, ChevronUp } from "lucide-react";
+import { motion } from "framer-motion";
+import { achievements } from "@/data/achievements";
+import { Trophy, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useState, useRef, useEffect } from "react";
 
-// Achievements array with placement order for sorting
-const achievements = [
-  {
-    prize: "Grand Champion (1st Place) & 4 Tracks Winner",
-    event: "BUIDL AI Hackathon 2025 (Seoul)",
-    project: "CureMeBaby",
-    description: "Seoul’s premier international 'AI x Crypto' hackathon. Won Grand Champion + 4 other sponsor track prizes.",
-    icon: Trophy,
-    color: "text-yellow-500",
-    order: 1, // 1st place
-  },
-  {
-    prize: "1st Place & Finalist, Celo Track",
-    event: "TOKEN2049 Origins Hackathon 2025 (Singapore)",
-    project: "LeftAI",
-    description: "Asia's largest crypto hackathon. Top 5 Finalist overall. Selected from 800+ global applicants, only 160 invited to compete.",
-    icon: Award,
-    color: "text-yellow-500",
-    order: 1,
-  },
-  {
-    prize: "1st Place Flow Track, 1st Place Hedera Track",
-    event: "ETHGlobal India 2025",
-    project: "Dhal Way",
-    description: "One of ETHGlobal's largest physical event. Won among 1,600 hackers from 25 countries.",
-    icon: Award,
-    color: "text-yellow-500",
-    order: 1,
-  },
-  {
-    prize: "1st Place, Flow Track",
-    event: "ETHGlobal Agentic 2025",
-    project: "4AI 1Human",
-    description: "ETHGlobal's AI-focused international online hackathon. Won among 1,700+ global participants.",
-    icon: Award,
-    color: "text-yellow-500",
-    order: 1,
-  },
-  {
-    prize: "1st Place & Finalist, AI Track",
-    event: "ETHTokyo 2025",
-    project: "Toku Kaigan",
-    description: "Tokyo's largest annual blockchain hackathon. Won 1st in Actually Intelligent Track + Top 10 Finalist overall.",
-    icon: Award,
-    color: "text-yellow-500",
-    order: 1,
-  },
-  {
-    prize: "1st Place",
-    event: "ImagineHack 2025 (Malaysia)",
-    project: "Tea Time",
-    description: "Taylor's University's iconic annual hackathon. Won 1st out of 170+ hackers from 23 countries and 17 universities.",
-    icon: Trophy,
-    color: "text-yellow-500",
-    order: 1,
-  },
-  {
-    prize: "2nd Place, 1inch Fusion+ Track",
-    event: "ETHGlobal Taipei 2025",
-    project: "MemestCutest Platform",
-    description: "ETHGlobal's Taiwan international hackathon. Won 2nd in the 1inch Fusion+ sponsor track.",
-    icon: Star,
-    color: "text-gray-300", // Silver
-    order: 2, // 2nd place
-  },
-  {
-    prize: "3rd Place, Aptos Track",
-    event: "Consensus Hong Kong Hackathon 2025",
-    project: "Grand Theft Aptos",
-    description: "CoinDesk’s flagship global event. Placed 3rd among 500+ hackers from top universities (Tsinghua, Yale, Oxford).",
-    icon: Star,
-    color: "text-gray-400", // Bronze-ish
-    order: 3, // 3rd place
-  },
-  {
-    prize: "Finalist & 4 Tracks Winner (2nd & 3rd Places)",
-    event: "ETHKL 2024 (Kuala Lumpur)",
-    project: "JustETH",
-    description: "Malaysia's largest annual blockchain hackathon. Top 5 Finalist overall + 4 sponsor prizes including IP-C Ethereum Fusion and WorldID.",
-    icon: Award,
-    color: "text-primary",
-    order: 4, // Finalist
-  },
-];
+// Number of achievements to show on home page
+const HOME_DISPLAY_COUNT = 4;
 
-// Sort achievements by placement order (1st, 2nd, 3rd, etc.)
-const sortedAchievements = [...achievements].sort((a, b) => a.order - b.order);
-
-// Number of achievements to show initially
-const INITIAL_DISPLAY_COUNT = 5;
-
-// Individual achievement card with scroll-based animation
-interface AchievementCardProps {
-  item: typeof achievements[0];
-  index: number;
-}
-
-function AchievementCard({ item, index }: AchievementCardProps) {
+// Individual achievement card for home page
+function AchievementCard({ item, index }: { item: typeof achievements[0]; index: number }) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
-  // Each card observes itself for scroll-based reveal
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.disconnect(); // Only animate once
+          observer.disconnect();
         }
       },
-      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' } // Trigger slightly before fully visible
+      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
     );
     
     if (cardRef.current) {
@@ -123,7 +32,6 @@ function AchievementCard({ item, index }: AchievementCardProps) {
     return () => observer.disconnect();
   }, []);
   
-  // Alternating left/right direction
   const isFromLeft = index % 2 === 0;
   
   const animationStyle = {
@@ -155,7 +63,7 @@ function AchievementCard({ item, index }: AchievementCardProps) {
           <span className="text-xs font-mono text-muted-foreground">Project:</span>
           <span className="text-sm font-mono text-primary">{item.project}</span>
         </div>
-        <p className="text-gray-400 text-sm leading-relaxed font-mono">
+        <p className="text-gray-400 text-sm leading-relaxed font-mono line-clamp-2">
           {item.description}
         </p>
       </div>
@@ -163,102 +71,66 @@ function AchievementCard({ item, index }: AchievementCardProps) {
   );
 }
 
-// Animated button component
-function AnimatedButton({ children, onClick, isVisible }: { children: React.ReactNode; onClick: () => void; isVisible: boolean }) {
-  const buttonRef = useRef<HTMLDivElement>(null);
-  const [show, setShow] = useState(false);
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShow(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 }
-    );
-    
-    if (buttonRef.current) {
-      observer.observe(buttonRef.current);
-    }
-    
-    return () => observer.disconnect();
-  }, []);
-  
-  return (
-    <div 
-      ref={buttonRef}
-      className="mt-8 flex justify-center"
-      style={{
-        opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-      }}
-    >
-      <button
-        onClick={onClick}
-        className="flex items-center gap-2 px-6 py-3 bg-muted border border-border rounded-lg text-primary font-mono text-sm hover:bg-primary/10 hover:border-primary transition-colors duration-300"
-      >
-        {children}
-      </button>
-    </div>
-  );
-}
-
 export default function Achievements() {
-  const [showAll, setShowAll] = useState(false);
+  // Show only specific top wins on home page
+  const featuredIds = [
+    "token2049-2025",
+    "ethglobal-delhi-2025",
+    "buidl-asia-2025",
+    "consensus-hk-2025",
+    "imaginehack-2025"
+  ];
   
-  // Determine how many achievements to display
-  const displayedAchievements = showAll 
-    ? sortedAchievements 
-    : sortedAchievements.slice(0, INITIAL_DISPLAY_COUNT);
+  const displayedAchievements = achievements.filter(item => featuredIds.includes(item.id));
   
-  const totalCount = sortedAchievements.length;
-  const displayedCount = displayedAchievements.length;
+  // Sort them to match the order in featuredIds
+  displayedAchievements.sort((a, b) => featuredIds.indexOf(a.id) - featuredIds.indexOf(b.id));
+  
+  const totalCount = achievements.length;
 
   return (
     <section id="achievements" className="py-24 relative border-t border-border bg-black/50">
       <div className="container mx-auto px-6">
         {/* Header */}
-        <div className="mb-16">
-          <div className="flex items-center gap-2 text-primary mb-2">
-            <Trophy size={20} />
-            <span className="text-sm font-mono">~/achievements</span>
+        <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-2 text-primary mb-2">
+              <Trophy size={20} />
+              <span className="text-sm font-mono">~/achievements</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+              <span className="text-primary">const</span> <span className="text-white">trophyCabinet</span> = [...]
+            </h2>
+            <p className="text-muted-foreground font-mono text-sm">
+              Showing <span className="text-primary">{displayedAchievements.length}</span> of <span className="text-primary">{totalCount}</span> major wins
+            </p>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            <span className="text-primary">const</span> <span className="text-white">trophyCabinet</span> = [...]
-          </h2>
-          {/* Display count indicator */}
-          <p className="text-muted-foreground font-mono text-sm">
-            Showing <span className="text-primary">{displayedCount}</span> of <span className="text-primary">{totalCount}</span> achievements
-          </p>
+          
+          <Link href="/achievements">
+             <button className="flex items-center gap-2 px-6 py-3 bg-primary/10 border border-primary/20 rounded-lg text-primary font-mono text-sm hover:bg-primary/20 hover:border-primary transition-all group">
+                View Full Archive
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+             </button>
+          </Link>
         </div>
 
-        {/* Single column layout - one achievement per row */}
+        {/* List */}
         <div className="flex flex-col gap-4">
           {displayedAchievements.map((item, index) => (
-            <AchievementCard key={index} item={item} index={index} />
+            <AchievementCard key={item.id} item={item} index={index} />
           ))}
         </div>
 
-        {/* Show More / Show Less Button */}
-        {totalCount > INITIAL_DISPLAY_COUNT && (
-          <AnimatedButton onClick={() => setShowAll(!showAll)} isVisible>
-            {showAll ? (
-              <>
-                <ChevronUp size={18} />
-                Show Less
-              </>
-            ) : (
-              <>
-                <ChevronDown size={18} />
-                Show More ({totalCount - INITIAL_DISPLAY_COUNT} more)
-              </>
-            )}
-          </AnimatedButton>
-        )}
+        {/* Mobile View All Button (visible only on small screens if header button is hidden or for ease) */}
+        <div className="mt-8 text-center md:hidden">
+            <Link href="/achievements">
+                <button className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-muted border border-border rounded-lg text-white font-mono text-sm hover:bg-white/5 transition-colors">
+                    View All {totalCount} Achievements
+                </button>
+            </Link>
+        </div>
       </div>
     </section>
   );
 }
+
