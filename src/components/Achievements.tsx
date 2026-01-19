@@ -27,8 +27,8 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
         cardRef.current,
         { 
           opacity: 0, 
-          x: isFromLeft ? -60 : 60,
-          scale: 0.95,
+          x: isFromLeft ? -250 : 250,
+          scale: 0.9,
         },
         {
           opacity: 1,
@@ -37,9 +37,9 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
           ease: "power2.out", 
           scrollTrigger: {
             trigger: cardRef.current,
-            start: "top 95%",     
-            end: "top 40%",       
-            scrub: 1.5,           
+            start: "top bottom",     
+            end: "top 25%",       
+            scrub: 2,           
           },
         }
       );
