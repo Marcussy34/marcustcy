@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { achievements } from "@/data/achievements";
 import Navbar from "@/components/Navbar";
-import { ArrowLeft, Calendar, Github, MapPin, Trophy, LayoutGrid, List as ListIcon } from "lucide-react";
+import { ChevronLeft, Calendar, Github, MapPin, Trophy, LayoutGrid, List as ListIcon, Terminal } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -26,31 +26,32 @@ export default function AchievementsPage() {
       <Navbar />
       
       <div className="container mx-auto px-6 pt-20 pb-12">
-        {/* Header */}
+        {/* Header - Terminal Style */}
         <div className="mb-12">
-          <Link 
+          <Link
             href="/"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-6 group"
+            className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors mb-6 font-mono text-sm"
           >
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            <span className="font-mono text-sm">cd ..</span>
+            <ChevronLeft size={16} />
+            <span>cd ~/portfolio</span>
           </Link>
-          
+
+          <div className="flex items-center gap-2 text-primary mb-4">
+            <Terminal size={20} />
+            <span className="text-sm font-mono">~/achievements</span>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-primary">
-                <Trophy size={32} />
-              </div>
-              <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                Trophy Cabinet
-              </h1>
-            </div>
-            <p className="text-xl text-muted-foreground max-w-2xl">
-              A collection of hackathon wins, competition awards, and recognitions from my journey.
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+              <span className="text-primary">ls</span>{" "}
+              <span className="text-white">trophy_cabinet/</span>
+            </h1>
+            <p className="text-gray-400 font-mono text-lg">
+              // {achievements.length} files found — hackathon wins, awards, and recognitions
             </p>
           </motion.div>
         </div>
