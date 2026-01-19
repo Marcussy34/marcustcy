@@ -155,7 +155,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         >
             {/* Spotlight Gradient */}
             <motion.div 
-                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="pointer-events-none absolute -inset-px opacity-50 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
                 style={{
                     background: useMotionTemplate`
                         radial-gradient(
@@ -172,7 +172,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                     ID: {project.id}
                 </div>
 
-                <div className="mb-4 text-primary group-hover:scale-110 transition-transform duration-300 origin-left">
+                <div className="mb-4 text-primary md:group-hover:scale-110 transition-transform duration-300 origin-left">
                     <Code size={24} />
                 </div>
 
@@ -184,7 +184,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                     {project.award}
                 </div>
 
-                <p className="text-gray-400 text-sm mb-6 font-mono leading-relaxed min-h-[80px]">
+                <p className="text-gray-400 text-sm mb-6 font-mono leading-relaxed min-h-[auto] md:min-h-[80px]">
                     {project.description}
                 </p>
 

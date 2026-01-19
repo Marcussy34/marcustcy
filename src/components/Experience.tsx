@@ -86,13 +86,24 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
 
   return (
     <div
-      ref={cardRef}
-      className="relative pl-8 md:pl-12 group"
+      className="relative pl-6 md:pl-12 group"
     >
-      {/* Timeline Dot */}
-      <div className="absolute -left-[4px] top-2 z-30 w-2.5 h-2.5 rounded-full bg-black border border-muted-foreground group-hover:border-primary group-hover:bg-primary transition-colors shadow-[0_0_0_4px_black]" />
+      {/* Timeline Dot - Scroll Activated */}
+      <motion.div 
+        className="absolute -left-[4px] top-2 z-30 w-2.5 h-2.5 rounded-full bg-black border shadow-[0_0_0_4px_black]"
+        initial={{ 
+            borderColor: "rgba(38, 38, 38, 1)", // border color (neutral-800)
+            backgroundColor: "#000000" 
+        }}
+        whileInView={{ 
+            borderColor: "#22c55e", // primary (green-500)
+            backgroundColor: "#22c55e"
+        }}
+        viewport={{ margin: "2000px 0px -50% 0px" }}
+        transition={{ duration: 0.3 }}
+      />
 
-      <div className="terminal-card p-6 hover:bg-white/5 transition-colors duration-300">
+      <div ref={cardRef} className="terminal-card p-6 hover:bg-white/5 transition-colors duration-300">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
           <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">
             {item.role}

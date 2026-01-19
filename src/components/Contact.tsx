@@ -49,7 +49,7 @@ export default function Contact() {
             <span className="text-primary">echo</span> <span className="text-white">"Let's Connect"</span>
           </h2>
           <p className="text-gray-400 text-lg mb-8 font-mono">
-            // Ready to collaborate on AI, Blockchain, and Secure Systems.
+            // Ready to collaborate.
           </p>
           
           <motion.a

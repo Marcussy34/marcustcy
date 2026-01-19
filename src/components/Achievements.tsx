@@ -76,7 +76,7 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
     >
       {/* Holographic Shine Overlay */}
       <div 
-        className="absolute inset-0 translate-x-[-150%] group-hover:animate-shine z-0 pointer-events-none"
+        className="absolute inset-0 translate-x-[-150%] animate-shine md:animate-none md:group-hover:animate-shine z-0 pointer-events-none opacity-50 md:opacity-100"
         style={{
             background: `linear-gradient(
                 90deg, 
@@ -86,6 +86,7 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
                 transparent 50%
             )`,
             transform: 'skewX(-25deg) translateX(-150%)',
+            animationDuration: '3s', // Slower on mobile
         }}
       />
 
