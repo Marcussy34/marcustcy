@@ -11,6 +11,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Marcus Tan | AI & Cybersecurity Engineer",
   description: "Portfolio of Marcus Tan Chi Yau - AI, Blockchain, and Full-Stack Developer.",
+  icons: {
+    icon: "/favicon-circle.png",
+    shortcut: "/favicon-circle.png",
+    apple: "/favicon-circle.png",
+  },
 };
 
 export default function RootLayout({
