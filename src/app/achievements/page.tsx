@@ -56,17 +56,17 @@ export default function AchievementsPage() {
           </motion.div>
         </div>
 
-        {/* Filters & View Toggle Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
-            {/* Filter Tabs */}
-            <div className="flex gap-2 p-1 bg-muted/30 rounded-lg border border-border">
+        {/* Filters & View Toggle Bar - Always in one line */}
+        <div className="flex items-center justify-between gap-2 mb-6">
+            {/* Filter Tabs - Left */}
+            <div className="flex gap-1 p-0.5 bg-muted/30 rounded-md border border-border">
               {["All", "2025", "2024"].map((year) => (
                 <button
                   key={year}
                   onClick={() => setFilter(year as any)}
-                  className={`px-4 py-1.5 rounded-md text-sm font-mono transition-all ${
+                  className={`px-2 sm:px-3 py-1 rounded text-xs sm:text-sm font-mono transition-all ${
                     filter === year
-                      ? "bg-primary text-black font-bold shadow-sm"
+                      ? "bg-primary text-black font-bold"
                       : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                   }`}
                 >
@@ -75,29 +75,29 @@ export default function AchievementsPage() {
               ))}
             </div>
 
-            {/* View Toggle */}
-            <div className="flex gap-1 p-1 bg-muted/30 rounded-lg border border-border">
+            {/* View Toggle - Right */}
+            <div className="flex gap-0.5 p-0.5 bg-muted/30 rounded-md border border-border">
                 <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 rounded-md transition-all ${
+                    className={`p-1.5 rounded transition-all ${
                         viewMode === "grid" 
                         ? "bg-background shadow-sm text-primary" 
                         : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                     }`}
-                    title="Grid View (With Pictures)"
+                    title="Grid View"
                 >
-                    <LayoutGrid size={18} />
+                    <LayoutGrid size={16} />
                 </button>
                 <button
                     onClick={() => setViewMode("list")}
-                    className={`p-2 rounded-md transition-all ${
+                    className={`p-1.5 rounded transition-all ${
                         viewMode === "list" 
                         ? "bg-background shadow-sm text-primary" 
                         : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                     }`}
-                    title="List View (Compact)"
+                    title="List View"
                 >
-                    <ListIcon size={18} />
+                    <ListIcon size={16} />
                 </button>
             </div>
         </div>
@@ -178,77 +178,127 @@ export default function AchievementsPage() {
             ))}
           </div>
         ) : (
-          /* === LIST VIEW (Table Layout) === */
-          <div className="border border-border rounded-lg overflow-hidden bg-card/30">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-muted/30">
-                    <th className="p-4 font-semibold text-muted-foreground w-[30%]">
-                      <div className="flex items-center gap-2">
-                        <Calendar size={14} />
-                        Event & Year
-                      </div>
-                    </th>
-                    <th className="p-4 font-semibold text-muted-foreground w-[50%]">
-                      <div className="flex items-center gap-2">
-                         <Trophy size={14} />
-                         Placement & Awards
-                      </div>
-                    </th>
-                    <th className="p-4 font-semibold text-muted-foreground w-[20%]">
-                      <div className="flex items-center gap-2">
-                         <Github size={14} />
-                         Project Repository
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/50">
-                  {filteredAchievements.map((item) => (
-                    <tr 
-                      key={item.id} 
-                      className="group bg-transparent hover:bg-white/5 transition-colors"
-                    >
-                      <td className="p-4 align-top">
-                        <div className="font-semibold text-white">{item.event}</div>
-                         <div className="text-xs text-muted-foreground mt-1">{item.year}</div>
-                      </td>
-                      <td className="p-4 align-top">
-                        <div className="flex items-start gap-2">
-                          <item.icon size={16} className={`mt-0.5 shrink-0 ${item.color}`} />
-                          <span className={`font-medium ${item.color}`}>{item.prize}</span>
+          /* === LIST VIEW === */
+          <>
+            {/* Desktop Table View - Hidden on mobile */}
+            <div className="hidden md:block border border-border rounded-lg overflow-hidden bg-card/30">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/30">
+                      <th className="p-4 font-semibold text-muted-foreground w-[30%]">
+                        <div className="flex items-center gap-2">
+                          <Calendar size={14} />
+                          Event & Year
                         </div>
-                         {item.location && (
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1 ml-6">
-                                <MapPin size={10} />
-                                {item.location}
-                            </div>
-                         )}
-                      </td>
-                      <td className="p-4 align-top">
-                         {item.repoUrl ? (
-                            <a 
-                              href={item.repoUrl} 
-                              target="_blank" 
-                              rel="noopener noreferrer" 
-                              className="inline-flex items-center gap-1.5 text-primary hover:underline underline-offset-4 font-mono text-xs"
-                            >
-                               {item.project}
-                            </a>
-                         ) : (
-                             <div className="flex flex-col">
-                                <span className="font-mono text-xs text-muted-foreground">{item.project || "No Project"}</span>
-                                <span className="text-[10px] text-muted-foreground/60">(No Repo)</span>
-                             </div>
-                         )}
-                      </td>
+                      </th>
+                      <th className="p-4 font-semibold text-muted-foreground w-[50%]">
+                        <div className="flex items-center gap-2">
+                           <Trophy size={14} />
+                           Placement & Awards
+                        </div>
+                      </th>
+                      <th className="p-4 font-semibold text-muted-foreground w-[20%]">
+                        <div className="flex items-center gap-2">
+                           <Github size={14} />
+                           Project Repository
+                        </div>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-border/50">
+                    {filteredAchievements.map((item) => (
+                      <tr 
+                        key={item.id} 
+                        className="group bg-transparent hover:bg-white/5 transition-colors"
+                      >
+                        <td className="p-4 align-top">
+                          <div className="font-semibold text-white">{item.event}</div>
+                           <div className="text-xs text-muted-foreground mt-1">{item.year}</div>
+                        </td>
+                        <td className="p-4 align-top">
+                          <div className="flex items-start gap-2">
+                            <item.icon size={16} className={`mt-0.5 shrink-0 ${item.color}`} />
+                            <span className={`font-medium ${item.color}`}>{item.prize}</span>
+                          </div>
+                           {item.location && (
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1 ml-6">
+                                  <MapPin size={10} />
+                                  {item.location}
+                              </div>
+                           )}
+                        </td>
+                        <td className="p-4 align-top">
+                           {item.repoUrl ? (
+                              <a 
+                                href={item.repoUrl} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="inline-flex items-center gap-1.5 text-primary hover:underline underline-offset-4 font-mono text-xs"
+                              >
+                                 {item.project}
+                              </a>
+                           ) : (
+                               <div className="flex flex-col">
+                                  <span className="font-mono text-xs text-muted-foreground">{item.project || "No Project"}</span>
+                                  <span className="text-[10px] text-muted-foreground/60">(No Repo)</span>
+                               </div>
+                           )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-          </div>
+
+            {/* Mobile Card View - Hidden on desktop */}
+            <div className="md:hidden space-y-3">
+              {filteredAchievements.map((item) => (
+                <div 
+                  key={item.id} 
+                  className="border border-border rounded-lg bg-card/30 p-4 hover:bg-white/5 transition-colors"
+                >
+                  {/* Event Name & Year */}
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="font-semibold text-white text-sm">{item.event}</div>
+                    <span className="text-xs text-muted-foreground shrink-0">{item.year}</span>
+                  </div>
+                  
+                  {/* Prize/Award */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <item.icon size={14} className={`shrink-0 ${item.color}`} />
+                    <span className={`font-medium text-sm ${item.color}`}>{item.prize}</span>
+                  </div>
+                  
+                  {/* Location */}
+                  {item.location && (
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
+                      <MapPin size={10} />
+                      {item.location}
+                    </div>
+                  )}
+                  
+                  {/* Project Link */}
+                  <div className="flex items-center gap-2 pt-2 border-t border-border/50">
+                    <Github size={12} className="text-muted-foreground" />
+                    {item.repoUrl ? (
+                      <a 
+                        href={item.repoUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-primary hover:underline underline-offset-4 font-mono text-xs"
+                      >
+                        {item.project}
+                      </a>
+                    ) : (
+                      <span className="font-mono text-xs text-muted-foreground">{item.project || "No Project"}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
         
         {/* Footer Note */}
