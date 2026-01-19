@@ -55,15 +55,12 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
   useEffect(() => {
     if (!cardRef.current) return;
     
-    // Alternating left/right direction
-    const isFromLeft = index % 2 === 0;
-    
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cardRef.current,
         { 
           opacity: 0, 
-          x: isFromLeft ? -60 : 60,
+          x: 60,
           scale: 0.95,
         },
         {
