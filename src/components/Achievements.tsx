@@ -103,7 +103,19 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
         </h4>
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs font-mono text-muted-foreground">Project:</span>
-          <span className="text-sm font-mono text-primary">{item.project}</span>
+          {item.repoUrl ? (
+            <a 
+              href={item.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-mono text-primary hover:underline hover:text-accent transition-colors z-20 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {item.project}
+            </a>
+          ) : (
+            <span className="text-sm font-mono text-primary">{item.project}</span>
+          )}
         </div>
         <p className="text-gray-400 text-sm leading-relaxed font-mono line-clamp-2">
           {item.description}
