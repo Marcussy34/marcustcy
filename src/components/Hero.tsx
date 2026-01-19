@@ -174,75 +174,108 @@ export default function Hero() {
             {/* Terminal Content */}
             <div 
               ref={scrollRef}
-              className="p-6 md:p-10 font-mono text-sm md:text-base space-y-6 flex-1 overflow-hidden"
+              className="p-6 md:p-10 font-mono text-sm md:text-base flex-1 overflow-hidden"
             >
-              <div className="space-y-2">
-                {bootStep >= 1 && (
-                  <div className="flex items-center gap-2 text-primary">
-                    <ChevronRight size={16} />
-                    <span className="text-white">
-                      {initText}
-                      {bootStep < 2 && <span className="cursor-blink text-primary">_</span>}
-                    </span>
+              <div className="flex gap-6 h-full">
+                {/* Left side - Terminal commands */}
+                <div className="flex-1 space-y-6">
+                  <div className="space-y-2">
+                    {bootStep >= 1 && (
+                      <div className="flex items-center gap-2 text-primary">
+                        <ChevronRight size={16} />
+                        <span className="text-white">
+                          {initText}
+                          {bootStep < 2 && <span className="cursor-blink text-primary">_</span>}
+                        </span>
+                      </div>
+                    )}
+                    
+                    <div className="text-muted-foreground pl-6 space-y-1">
+                      {bootStep >= 2 && (
+                        <div><span className="text-primary">location:</span> <span className="text-gray-400">Subang Jaya, Malaysia 🇲🇾</span></div>
+                      )}
+                      {bootStep >= 3 && (
+                        <div><span className="text-primary">focus:</span> <span className="text-gray-400">AI · Web3 · Full-Stack</span></div>
+                      )}
+                      {bootStep >= 4 && (
+                        <div><span className="text-primary">status:</span> <span className="text-green-400">Full-time building 🚀</span></div>
+                      )}
+                    </div>
                   </div>
-                )}
-                
-                <div className="text-muted-foreground pl-6 space-y-1">
-                  {bootStep >= 2 && (
-                    <div><span className="text-primary">location:</span> <span className="text-gray-400">Subang Jaya, Malaysia 🇲🇾</span></div>
+
+                  {bootStep >= 5 && (
+                    <div className="space-y-4 py-4">
+                      <div className="text-base md:text-lg text-white font-mono tracking-tight">
+                        <span className="text-primary mr-2">➜</span>
+                        {text}
+                        {bootStep < 6 && <span className="cursor-blink text-primary">_</span>}
+                      </div>
+                      
+                      {/* Installing spinner - shows briefly while "loading" */}
+                      {showInstalling && (
+                        <div className="pl-6 text-gray-400 font-mono text-sm flex items-center gap-2">
+                          <Loader2 size={14} className="animate-spin text-primary" />
+                          <span>Installing packages...</span>
+                        </div>
+                      )}
+                      
+                      {/* npm output - appears all at once after "installing" */}
+                      {bootStep >= 7 && (
+                        <div className="pl-6 text-gray-400 max-w-2xl leading-relaxed font-mono text-sm">
+                          {renderNpmOutput()}
+                        </div>
+                      )}
+
+                      <div className="space-y-2 pt-4 pl-6">
+                        {bootStep >= 8 && (
+                          <a
+                            href="#projects"
+                            className="block text-gray-400 hover:text-primary transition-colors"
+                          >
+                            <span className="text-primary">$</span> ./view_projects.sh
+                          </a>
+                        )}
+                        {bootStep >= 9 && (
+                          <a
+                            href="#contact"
+                            className="block text-gray-400 hover:text-primary transition-colors"
+                          >
+                            <span className="text-primary">$</span> ./contact_me.sh
+                          </a>
+                        )}
+                      </div>
+                    </div>
                   )}
-                  {bootStep >= 3 && (
-                    <div><span className="text-primary">focus:</span> <span className="text-gray-400">AI · Web3 · Full-Stack</span></div>
-                  )}
-                  {bootStep >= 4 && (
-                    <div><span className="text-primary">status:</span> <span className="text-green-400">Full-time building 🚀</span></div>
-                  )}
+                </div>
+
+                {/* Right side - ASCII Art (hidden on mobile) */}
+                <div className="hidden lg:flex items-center justify-center px-8">
+                  <div>
+                    <pre className="text-primary/70 text-xs leading-[1.2] select-none whitespace-pre">
+{`   ╔════════════════════════╗
+   ║  ┌────────────────────┐║
+   ║  │    ~/portfolio     │║
+   ║  │────────────────────│║
+   ║  │  > init.sh         │║
+   ║  │  > skills.js       │║
+   ║  │  > build.ts        │║
+   ║  │  > deploy 🚀       │║
+   ║  └────────────────────┘║
+   ╚════════════════════════╝
+       ╱╲______________╱╲
+      ╱                  ╲
+     ╱____________________╲
+    │  ──────────────────  │
+    │    [AI]   [WEB3]     │
+    │     [FULLSTACK]      │
+    └──────────────────────┘`}
+                    </pre>
+                    <div className="text-primary text-xs mt-1 font-mono">
+                      {`   > `}<span className="cursor-blink">_</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {bootStep >= 5 && (
-                <div className="space-y-4 py-4">
-                  <div className="text-base md:text-lg text-white font-mono tracking-tight">
-                    <span className="text-primary mr-2">➜</span>
-                    {text}
-                    {bootStep < 6 && <span className="cursor-blink text-primary">_</span>}
-                  </div>
-                  
-                  {/* Installing spinner - shows briefly while "loading" */}
-                  {showInstalling && (
-                    <div className="pl-6 text-gray-400 font-mono text-sm flex items-center gap-2">
-                      <Loader2 size={14} className="animate-spin text-primary" />
-                      <span>Installing packages...</span>
-                    </div>
-                  )}
-                  
-                  {/* npm output - appears all at once after "installing" */}
-                  {bootStep >= 7 && (
-                    <div className="pl-6 text-gray-400 max-w-2xl leading-relaxed font-mono text-sm">
-                      {renderNpmOutput()}
-                    </div>
-                  )}
-
-                  <div className="space-y-2 pt-4 pl-6">
-                    {bootStep >= 8 && (
-                      <a
-                        href="#projects"
-                        className="block text-gray-400 hover:text-primary transition-colors"
-                      >
-                        <span className="text-primary">$</span> ./view_projects.sh
-                      </a>
-                    )}
-                    {bootStep >= 9 && (
-                      <a
-                        href="#contact"
-                        className="block text-gray-400 hover:text-primary transition-colors"
-                      >
-                        <span className="text-primary">$</span> ./contact_me.sh
-                      </a>
-                    )}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
