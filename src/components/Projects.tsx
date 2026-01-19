@@ -67,41 +67,43 @@ export default function Projects() {
     if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
-      // Animate header
+      // Animate header with scrub
       gsap.fromTo(
         headerRef.current,
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 40 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          ease: "power2.out",
+          ease: "none",
           scrollTrigger: {
             trigger: headerRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
+            start: "top 90%",
+            end: "top 60%",
+            scrub: 0.5,
           },
         }
       );
 
-      // Animate cards with stagger
-      gsap.fromTo(
-        ".project-card",
-        { opacity: 0, y: 40, scale: 0.95 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.5,
-          ease: "power2.out",
-          stagger: 0.1,
-          scrollTrigger: {
-            trigger: cardsRef.current,
-            start: "top 80%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
+      // Animate each card individually with scrub
+      const cards = cardsRef.current?.querySelectorAll(".project-card");
+      cards?.forEach((card, index) => {
+        gsap.fromTo(
+          card,
+          { opacity: 0, y: 50, scale: 0.9 },
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 90%",
+              end: "top 55%",
+              scrub: 0.5,
+            },
+          }
+        );
+      });
     }, sectionRef);
 
     return () => ctx.revert();

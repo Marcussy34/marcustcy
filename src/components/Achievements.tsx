@@ -12,7 +12,7 @@ gsap.registerPlugin(ScrollTrigger);
 // Number of achievements to show on home page
 const HOME_DISPLAY_COUNT = 4;
 
-// Individual achievement card for home page
+// Individual achievement card for home page with scrub animation
 function AchievementCard({ item, index }: { item: typeof achievements[0]; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
   
@@ -27,17 +27,19 @@ function AchievementCard({ item, index }: { item: typeof achievements[0]; index:
         cardRef.current,
         { 
           opacity: 0, 
-          x: isFromLeft ? -50 : 50 
+          x: isFromLeft ? -80 : 80,
+          scale: 0.9,
         },
         {
           opacity: 1,
           x: 0,
-          duration: 0.7,
-          ease: "power2.out",
+          scale: 1,
+          ease: "none", // Linear for smooth scrub
           scrollTrigger: {
             trigger: cardRef.current,
-            start: "top 85%",
-            toggleActions: "play none none none",
+            start: "top 90%",     // Animation starts when top of card hits 90% of viewport
+            end: "top 50%",       // Animation completes when top of card hits 50% of viewport
+            scrub: 0.5,           // Smooth scrubbing with 0.5s catch-up
           },
         }
       );
