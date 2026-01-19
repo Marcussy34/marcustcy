@@ -178,7 +178,7 @@ function AnimatedButton({ children, onClick }: { children: React.ReactNode; onCl
   );
 }
 
-import { motion, useScroll, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 
 // ... (existing imports and experience data)
 
@@ -189,9 +189,8 @@ export default function Experience() {
   // Number of experiences to show initially
   const INITIAL_DISPLAY_COUNT = 2;
   
-  const displayedExperience = showAll 
-    ? experience 
-    : experience.slice(0, INITIAL_DISPLAY_COUNT);
+  const initialItems = experience.slice(0, INITIAL_DISPLAY_COUNT);
+  const hiddenItems = experience.slice(INITIAL_DISPLAY_COUNT);
   
   const totalCount = experience.length;
 
@@ -218,7 +217,7 @@ export default function Experience() {
             <span className="text-primary">const</span> <span className="text-white">careerPath</span> = [...]
           </h2>
           <p className="text-muted-foreground font-mono text-sm">
-            Showing <span className="text-primary">{displayedExperience.length}</span> of <span className="text-primary">{totalCount}</span> positions
+            Showing <span className="text-primary">{showAll ? totalCount : INITIAL_DISPLAY_COUNT}</span> of <span className="text-primary">{totalCount}</span> positions
           </p>
         </div>
 
@@ -237,9 +236,29 @@ export default function Experience() {
           />
 
           <div className="space-y-12 relative z-20">
-            {displayedExperience.map((item, index) => (
+            {initialItems.map((item, index) => (
               <ExperienceCard key={item.id} item={item} index={index} />
             ))}
+
+            <AnimatePresence>
+                {showAll && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        className="overflow-hidden space-y-12"
+                    >
+                        {hiddenItems.map((item, index) => (
+                            <ExperienceCard 
+                                key={item.id} 
+                                item={item} 
+                                index={index + INITIAL_DISPLAY_COUNT} 
+                            />
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
           </div>
         </div>
 
