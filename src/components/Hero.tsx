@@ -10,12 +10,35 @@ export default function Hero() {
   const [bootStep, setBootStep] = useState(0);
   const [showInstalling, setShowInstalling] = useState(false);
   const [showOutput, setShowOutput] = useState(false);
+  const [asciiLineIndex, setAsciiLineIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const initIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const titleIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const asciiIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const fullInitText = "whoami --verbose";
   const fullText = "$ npm install marcus-tan";
+  
+  // ASCII Art lines
+  const asciiLines = [
+    "   ╔════════════════════════╗",
+    "   ║  ┌────────────────────┐║",
+    "   ║  │    ~/portfolio     │║",
+    "   ║  │────────────────────│║",
+    "   ║  │  > init.sh         │║",
+    "   ║  │  > skills.js       │║",
+    "   ║  │  > build.ts        │║",
+    "   ║  │  > deploy..        │║",
+    "   ║  └────────────────────┘║",
+    "   ╚════════════════════════╝",
+    "       ╱╲______________╱╲",
+    "      ╱                  ╲",
+    "     ╱____________________╲",
+    "    │  ──────────────────  │",
+    "    │    [AI]   [WEB3]     │",
+    "    │     [FULLSTACK]      │",
+    "    └──────────────────────┘",
+  ];
 
   // Boot Sequence Animation
   useEffect(() => {
@@ -86,6 +109,18 @@ export default function Hero() {
         }
       }, 40);
     }
+    
+    // Start ASCII art typing (after boot step 4)
+    if (bootStep >= 4 && !asciiIntervalRef.current) {
+      let lineIdx = 0;
+      asciiIntervalRef.current = setInterval(() => {
+        setAsciiLineIndex(prev => prev + 1);
+        lineIdx++;
+        if (lineIdx >= asciiLines.length) {
+          if (asciiIntervalRef.current) clearInterval(asciiIntervalRef.current);
+        }
+      }, 80); // 80ms per line
+    }
   }, [bootStep]);
 
   // Cleanup intervals on unmount
@@ -93,6 +128,7 @@ export default function Hero() {
     return () => {
       if (initIntervalRef.current) clearInterval(initIntervalRef.current);
       if (titleIntervalRef.current) clearInterval(titleIntervalRef.current);
+      if (asciiIntervalRef.current) clearInterval(asciiIntervalRef.current);
     };
   }, []);
 
@@ -252,27 +288,13 @@ export default function Hero() {
                 <div className="hidden lg:flex items-center justify-center px-8">
                   <div>
                     <pre className="text-primary/70 text-xs leading-[1.2] select-none whitespace-pre">
-{`   ╔════════════════════════╗
-   ║  ┌────────────────────┐║
-   ║  │    ~/portfolio     │║
-   ║  │────────────────────│║
-   ║  │  > init.sh         │║
-   ║  │  > skills.js       │║
-   ║  │  > build.ts        │║
-   ║  │  > deploy..        │║
-   ║  └────────────────────┘║
-   ╚════════════════════════╝
-       ╱╲______________╱╲
-      ╱                  ╲
-     ╱____________________╲
-    │  ──────────────────  │
-    │    [AI]   [WEB3]     │
-    │     [FULLSTACK]      │
-    └──────────────────────┘`}
+{asciiLines.slice(0, asciiLineIndex).join("\n")}
                     </pre>
-                    <div className="text-primary text-xs mt-1 font-mono">
-                      {`   > `}<span className="cursor-blink">_</span>
-                    </div>
+                    {asciiLineIndex >= asciiLines.length && (
+                      <div className="text-primary text-xs mt-1 font-mono">
+                        {`   > `}<span className="cursor-blink">_</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
