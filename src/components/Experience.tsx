@@ -63,19 +63,19 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
         cardRef.current,
         { 
           opacity: 0, 
-          x: isFromLeft ? -80 : 80,
-          scale: 0.9,
+          x: isFromLeft ? -60 : 60,
+          scale: 0.95,
         },
         {
           opacity: 1,
           x: 0,
           scale: 1,
-          ease: "none", // Linear for smooth scrub
+          ease: "power2.out", // Smooth easing for natural feel
           scrollTrigger: {
             trigger: cardRef.current,
-            start: "top 90%",     // Animation starts when top of card hits 90% of viewport
-            end: "top 50%",       // Animation completes when top of card hits 50% of viewport
-            scrub: 0.5,           // Smooth scrubbing with 0.5s catch-up
+            start: "top 95%",     // Start earlier
+            end: "top 40%",       // End later for longer animation range
+            scrub: 1.5,           // Higher scrub = smoother, less snappy
           },
         }
       );

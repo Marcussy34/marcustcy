@@ -70,16 +70,16 @@ export default function Projects() {
       // Animate header with scrub
       gsap.fromTo(
         headerRef.current,
-        { opacity: 0, y: 40 },
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          ease: "none",
+          ease: "power2.out",
           scrollTrigger: {
             trigger: headerRef.current,
-            start: "top 90%",
-            end: "top 60%",
-            scrub: 0.5,
+            start: "top 95%",
+            end: "top 50%",
+            scrub: 1.5,
           },
         }
       );
@@ -89,17 +89,17 @@ export default function Projects() {
       cards?.forEach((card, index) => {
         gsap.fromTo(
           card,
-          { opacity: 0, y: 50, scale: 0.9 },
+          { opacity: 0, y: 40, scale: 0.95 },
           {
             opacity: 1,
             y: 0,
             scale: 1,
-            ease: "none",
+            ease: "power2.out",
             scrollTrigger: {
               trigger: card,
-              start: "top 90%",
-              end: "top 55%",
-              scrub: 0.5,
+              start: "top 95%",
+              end: "top 40%",
+              scrub: 1.5,
             },
           }
         );
