@@ -97,127 +97,153 @@ export default function AchievementsPage() {
         </div>
 
         {/* Content Area */}
-        <div className={`grid gap-4 ${viewMode === "grid" ? "grid-cols-1" : "grid-cols-1"}`}>
-          {filteredAchievements.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`group relative border border-border bg-card/50 rounded-lg overflow-hidden hover:border-primary/50 transition-colors duration-300 ${
-                  viewMode === "list" ? "hover:bg-white/5" : ""
-              }`}
-            >
-                {viewMode === "grid" ? (
-                    // === GRID VIEW (Rich, same as before) ===
-                    <div className="flex flex-col md:flex-row h-full">
-                        <div className="w-full md:w-32 bg-muted/30 relative border-b md:border-b-0 md:border-r border-border flex flex-col items-center justify-center p-4 group-hover:bg-primary/5 transition-colors shrink-0">
-                            <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:8px_8px]" />
-                            <div className={`p-3 rounded-xl bg-background/50 backdrop-blur-sm border border-border shadow-sm ${item.color} transform group-hover:scale-105 transition-transform duration-300`}>
-                                <item.icon size={28} />
-                            </div>
-                            <div className="mt-3 text-xs font-mono text-muted-foreground text-center">{item.year}</div>
-                        </div>
+        {viewMode === "grid" ? (
+          <div className="grid grid-cols-1 gap-4">
+            {filteredAchievements.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="group relative border border-border bg-card/50 rounded-lg overflow-hidden hover:border-primary/50 transition-colors duration-300"
+              >
+                <div className="flex flex-col md:flex-row h-full">
+                  {/* Visual Side (Compact) */}
+                  <div className="w-full md:w-32 bg-muted/30 relative border-b md:border-b-0 md:border-r border-border flex flex-col items-center justify-center p-4 group-hover:bg-primary/5 transition-colors shrink-0">
+                    {/* Decorative Pattern - lighter opacity */}
+                    <div className="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:8px_8px]" />
 
-                        <div className="flex-1 p-4 md:p-5 flex flex-col justify-center">
-                            <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-2">
-                                <div>
-                                    <h2 className={`text-lg md:text-xl font-bold ${item.color} leading-tight mb-1`}>
-                                    {item.prize}
-                                    </h2>
-                                    <h3 className="text-base text-white font-semibold">
-                                    {item.event}
-                                    </h3>
-                                </div>
-                                {item.location && (
-                                    <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0 mt-1 md:mt-0">
-                                    <MapPin size={12} />
-                                    {item.location}
-                                    </div>
-                                )}
-                            </div>
-                            
-                            <div className="flex items-center gap-2 mb-2 text-sm">
-                                <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Project:</span>
-                                <span className="text-primary font-mono">{item.project}</span>
-                            </div>
-                            
-                            <p className="text-gray-400 text-sm leading-relaxed dark:text-gray-300 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
-                                {item.description}
-                            </p>
-
-                            <div className="mt-3 pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-3">
-                                <div className="flex flex-wrap gap-2">
-                                    {item.tags.slice(0, 3).map(tag => (
-                                    <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-foreground">
-                                        {tag}
-                                    </span>
-                                    ))}
-                                </div>
-                                
-                                {item.repoUrl && (
-                                    <a href={item.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors">
-                                        <Github size={12} />
-                                        Code
-                                    </a>
-                                )}
-                            </div>
-                        </div>
+                    <div className={`p-3 rounded-xl bg-background/50 backdrop-blur-sm border border-border shadow-sm ${item.color} transform group-hover:scale-105 transition-transform duration-300`}>
+                      <item.icon size={28} />
                     </div>
-                ) : (
-                    // === LIST VIEW (Compact Table-like) ===
-                    <div className="flex items-center justify-between p-4 gap-4">
-                        <div className="flex items-center gap-4 flex-1 min-w-0">
-                             {/* Icon (Small) */}
-                            <div className={`p-2 rounded-lg bg-muted/50 border border-border ${item.color} shrink-0`}>
-                                <item.icon size={16} />
-                            </div>
 
-                            {/* Main Info */}
-                            <div className="min-w-0 flex-1">
-                                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                                    <span className={`text-base font-bold truncate ${item.color}`}>{item.prize}</span>
-                                    <span className="text-white truncate font-medium text-sm">{item.event}</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-                                    <span className="font-mono text-primary">{item.project}</span>
-                                    <span>•</span>
-                                    <span>{item.year}</span>
-                                    {item.location && (
-                                        <>
-                                            <span>•</span>
-                                            <span>{item.location}</span>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
+                    <div className="mt-3 text-xs font-mono text-muted-foreground text-center">{item.year}</div>
+                  </div>
+
+                  {/* Content Side */}
+                  <div className="flex-1 p-4 md:p-5 flex flex-col justify-center">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-2">
+                      <div>
+                        <h2 className={`text-lg md:text-xl font-bold ${item.color} leading-tight mb-1`}>
+                          {item.prize}
+                        </h2>
+                        <h3 className="text-base text-white font-semibold">
+                          {item.event}
+                        </h3>
+                      </div>
+                      {item.location && (
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0 mt-1 md:mt-0">
+                          <MapPin size={12} />
+                          {item.location}
                         </div>
-
-                         {/* Actions / Right Side */}
-                        <div className="flex items-center gap-4 shrink-0">
-                            {/* Tags (Desktop only) */}
-                            <div className="hidden md:flex gap-1.5">
-                                {item.tags.slice(0, 2).map(tag => (
-                                    <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-muted border border-border text-muted-foreground">
-                                        {tag}
-                                    </span>
-                                ))}
-                            </div>
-
-                            {item.repoUrl ? (
-                                <a href={item.repoUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-white transition-colors p-1" title="View Code">
-                                    <Github size={16} />
-                                </a>
-                            ) : (
-                                <div className="w-6" /> // Spacer
-                            )}
-                        </div>
+                      )}
                     </div>
-                )}
-            </motion.div>
-          ))}
-        </div>
+
+                    <div className="flex items-center gap-2 mb-2 text-sm">
+                      <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Project:</span>
+                      <span className="text-primary font-mono">{item.project}</span>
+                    </div>
+
+                    <p className="text-gray-400 text-sm leading-relaxed dark:text-gray-300 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
+                      {item.description}
+                    </p>
+
+                    {/* Footer - Tags & Links */}
+                    <div className="mt-3 pt-3 border-t border-border/50 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap gap-2">
+                        {item.tags.slice(0, 3).map(tag => (
+                          <span key={tag} className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-muted-foreground">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {item.repoUrl && (
+                        <a href={item.repoUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors">
+                          <Github size={12} />
+                          Code
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          /* === LIST VIEW (Table Layout) === */
+          <div className="border border-border rounded-lg overflow-hidden bg-card/30">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border bg-muted/30">
+                    <th className="p-4 font-semibold text-muted-foreground w-[30%]">
+                      <div className="flex items-center gap-2">
+                        <Calendar size={14} />
+                        Event & Year
+                      </div>
+                    </th>
+                    <th className="p-4 font-semibold text-muted-foreground w-[50%]">
+                      <div className="flex items-center gap-2">
+                         <Trophy size={14} />
+                         Placement & Awards
+                      </div>
+                    </th>
+                    <th className="p-4 font-semibold text-muted-foreground w-[20%]">
+                      <div className="flex items-center gap-2">
+                         <Github size={14} />
+                         Project Repository
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/50">
+                  {filteredAchievements.map((item) => (
+                    <tr 
+                      key={item.id} 
+                      className="group bg-transparent hover:bg-white/5 transition-colors"
+                    >
+                      <td className="p-4 align-top">
+                        <div className="font-semibold text-white">{item.event}</div>
+                         <div className="text-xs text-muted-foreground mt-1">{item.year}</div>
+                      </td>
+                      <td className="p-4 align-top">
+                        <div className="flex items-start gap-2">
+                          <item.icon size={16} className={`mt-0.5 shrink-0 ${item.color}`} />
+                          <span className={`font-medium ${item.color}`}>{item.prize}</span>
+                        </div>
+                         {item.location && (
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1 ml-6">
+                                <MapPin size={10} />
+                                {item.location}
+                            </div>
+                         )}
+                      </td>
+                      <td className="p-4 align-top">
+                         {item.repoUrl ? (
+                            <a 
+                              href={item.repoUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              className="inline-flex items-center gap-1.5 text-primary hover:underline underline-offset-4 font-mono text-xs"
+                            >
+                               {item.project}
+                            </a>
+                         ) : (
+                             <div className="flex flex-col">
+                                <span className="font-mono text-xs text-muted-foreground">{item.project || "No Project"}</span>
+                                <span className="text-[10px] text-muted-foreground/60">(No Repo)</span>
+                             </div>
+                         )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
         
         {/* Footer Note */}
         <div className="mt-24 text-center text-muted-foreground text-sm font-mono">

@@ -24,7 +24,8 @@ export const achievements: Achievement[] = [
     project: "Koyak Kombat",
     description: "Built a game-changing tool for indie hackers. Recognized as the best indie hacker project.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
+    repoUrl: "https://github.com/Marcussy34/koyak-kombat",
     tags: ["AI", "Tools"],
   },
   {
@@ -35,7 +36,8 @@ export const achievements: Achievement[] = [
     project: "Dhal Way",
     description: "Integrated blockchain features into an existing codebase seamlessly.",
     icon: Medal,
-    color: "text-primary", // Bronze
+    color: "text-amber-700", // Bronze
+    repoUrl: "https://github.com/derek2403/dhal-way",
     tags: ["Blockchain", "Integration"],
   },
   {
@@ -46,7 +48,8 @@ export const achievements: Achievement[] = [
     project: "Credo Protocol",
     description: "Top performer in the Proof of Build competition.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
+    repoUrl: "https://github.com/Credo-Protocol/Credo-Protocol",
     tags: ["Blockchain", "Protocol"],
   },
   {
@@ -57,7 +60,8 @@ export const achievements: Achievement[] = [
     project: "Pet Pet",
     description: "Innovative use of BlockScout AutoScout in a decentralized application.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
+    repoUrl: "https://github.com/derek2403/pet-pet",
     tags: ["Blockchain", "Tooling"],
   },
   {
@@ -68,8 +72,9 @@ export const achievements: Achievement[] = [
     project: "LeftAI",
     description: "Asia's largest crypto hackathon. Top 5 Finalist overall. Selected from 800+ global applicants, only 160 invited to compete.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
     location: "Singapore",
+    repoUrl: "https://github.com/derek2403/token2049",
     tags: ["Blockchain", "AI", "Celo"],
   },
   {
@@ -80,8 +85,9 @@ export const achievements: Achievement[] = [
     project: "Dhal Way",
     description: "One of ETHGlobal's largest physical event. Won among 1,600 hackers from 25 countries.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
     location: "New Delhi",
+    repoUrl: "https://github.com/derek2403/ethindia",
     tags: ["Blockchain", "Flow", "Hedera"],
   },
   {
@@ -92,8 +98,9 @@ export const achievements: Achievement[] = [
     project: "Toku Kaigan",
     description: "Tokyo's largest annual blockchain hackathon. Won 1st in Actually Intelligent Track + Top 10 Finalist overall.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
     location: "Tokyo",
+    repoUrl: "https://github.com/derek2403/ethtokyo",
     tags: ["Blockchain", "AI"],
   },
   {
@@ -104,7 +111,7 @@ export const achievements: Achievement[] = [
     project: "Kwek Kwek",
     description: "Overall champion of the event. (No Repository)",
     icon: Crown,
-    color: "text-primary",
+    color: "text-yellow-400",
     tags: ["Hackathon", "Champion"],
   },
   {
@@ -115,7 +122,8 @@ export const achievements: Achievement[] = [
     project: "Grand Warden",
     description: "Best use of Sapphire/ROFL on Oasis network and SUI track finalist.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
+    repoUrl: "https://github.com/Marcussy34/apudevmatch2025",
     tags: ["Blockchain", "Privacy", "Security"],
   },
   {
@@ -126,7 +134,8 @@ export const achievements: Achievement[] = [
     project: "Tea Time",
     description: "Taylor's University's iconic annual hackathon. Won 1st out of 170+ hackers from 23 countries and 17 universities.",
     icon: Crown,
-    color: "text-primary",
+    color: "text-yellow-400",
+    repoUrl: "https://github.com/derek2403/tt",
     tags: ["Hackathon", "Champion"],
   },
   {
@@ -138,6 +147,7 @@ export const achievements: Achievement[] = [
     description: "Selected as a top 10 finalist in a highly competitive field.",
     icon: Star,
     color: "text-primary",
+    repoUrl: "https://github.com/Marcussy34/solana-mega",
     tags: ["Solana", "Hackathon"],
   },
   {
@@ -148,8 +158,9 @@ export const achievements: Achievement[] = [
     project: "CureMeBaby",
     description: "Seoul’s premier international 'AI x Crypto' hackathon. Won Grand Champion + 4 other sponsor track prizes.",
     icon: Crown,
-    color: "text-primary",
+    color: "text-yellow-400",
     location: "Seoul",
+    repoUrl: "https://github.com/derek2403/CureMeBaby",
     tags: ["Blockchain", "AI", "Healthcare"],
   },
   {
@@ -160,8 +171,9 @@ export const achievements: Achievement[] = [
     project: "MemestCutestPlatform",
     description: "ETHGlobal's Taiwan international hackathon. Won 2nd in the 1inch Fusion+ sponsor track.",
     icon: Medal,
-    color: "text-primary",
+    color: "text-gray-300",
     location: "Taipei",
+    repoUrl: "https://github.com/derek2403/memest-cutest-platform",
     tags: ["Blockchain", "DeFi"],
   },
   {
@@ -172,8 +184,9 @@ export const achievements: Achievement[] = [
     project: "Grand Theft Aptos",
     description: "CoinDesk’s flagship global event. Placed 3rd among 500+ hackers from top universities (Tsinghua, Yale, Oxford).",
     icon: Medal,
-    color: "text-primary",
+    color: "text-amber-700",
     location: "Hong Kong",
+    repoUrl: "https://github.com/derek2403/grand-theft-aptos",
     tags: ["Blockchain", "Gaming", "Aptos"],
   },
   {
@@ -184,7 +197,8 @@ export const achievements: Achievement[] = [
     project: "4AI 1Human",
     description: "ETHGlobal's AI-focused international online hackathon. Won among 1,700+ global participants.",
     icon: Trophy,
-    color: "text-primary",
+    color: "text-yellow-500",
+    repoUrl: "https://github.com/derek2403/4AI-1Human",
     tags: ["AI", "Agents", "Blockchain"],
   },
   {
@@ -197,6 +211,7 @@ export const achievements: Achievement[] = [
     icon: Award,
     color: "text-primary",
     location: "Kuala Lumpur",
+    repoUrl: "https://github.com/derek2403/AI-Food-Rating-App",
     tags: ["Blockchain", "Ethereum"],
   },
   {
@@ -207,7 +222,8 @@ export const achievements: Achievement[] = [
     project: "Fundify",
     description: "Runner up in the Government Services track using Maschain.",
     icon: Medal,
-    color: "text-primary",
+    color: "text-gray-300",
+    repoUrl: "https://github.com/Lim-921/DevMatch",
     tags: ["Blockchain", "GovTech"],
   },
   {
@@ -218,7 +234,7 @@ export const achievements: Achievement[] = [
     project: "No Repo",
     description: "Awarded 2nd place for AI model development.",
     icon: Medal,
-    color: "text-primary",
+    color: "text-gray-300",
     tags: ["AI", "Modeling"],
   },
   {
