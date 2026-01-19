@@ -117,10 +117,10 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
               alt={`${item.company} logo`}
               width={32}
               height={32}
-              className="rounded object-cover"
+              className="rounded-full object-cover"
             />
           ) : (
-            <div className="w-8 h-8 rounded bg-muted border border-border flex items-center justify-center text-primary">
+            <div className="w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center text-primary">
               <Briefcase size={18} />
             </div>
           )}
