@@ -1,51 +1,54 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { achievements } from "@/data/achievements";
 import { Trophy, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Number of achievements to show on home page
 const HOME_DISPLAY_COUNT = 4;
 
 // Individual achievement card for home page
 function AchievementCard({ item, index }: { item: typeof achievements[0]; index: number }) {
-  const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
+    if (!cardRef.current) return;
+    
+    // Alternating left/right direction
+    const isFromLeft = index % 2 === 0;
+    
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardRef.current,
+        { 
+          opacity: 0, 
+          x: isFromLeft ? -50 : 50 
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.7,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
         }
-      },
-      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
-    );
+      );
+    });
     
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-    
-    return () => observer.disconnect();
-  }, []);
-  
-  const isFromLeft = index % 2 === 0;
-  
-  const animationStyle = {
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible 
-      ? 'translateX(0)' 
-      : `translateX(${isFromLeft ? '-50px' : '50px'})`,
-    transition: 'opacity 0.8s ease-out, transform 1s ease-out',
-  };
+    return () => ctx.revert();
+  }, [index]);
   
   return (
     <div
       ref={cardRef}
-      style={animationStyle}
       className="terminal-card p-6 flex items-start gap-4 group hover:bg-white/5 transition-colors duration-300"
     >
       <div className={`p-3 rounded bg-muted border border-border ${item.color} group-hover:text-white group-hover:bg-primary/20 transition-colors`}>

@@ -1,7 +1,11 @@
 "use client";
 
-
 import { ExternalLink, Github, Terminal, Code } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -55,12 +59,58 @@ const projects = [
 ];
 
 export default function Projects() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      // Animate header
+      gsap.fromTo(
+        headerRef.current,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+
+      // Animate cards with stagger
+      gsap.fromTo(
+        ".project-card",
+        { opacity: 0, y: 40, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.5,
+          ease: "power2.out",
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: cardsRef.current,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="projects" className="py-24 relative border-t border-border">
+    <section ref={sectionRef} id="projects" className="py-24 relative border-t border-border">
       <div className="container mx-auto px-6">
-        <div
-          className="mb-16"
-        >
+        <div ref={headerRef} className="mb-16">
           <div className="flex items-center gap-2 text-primary mb-2">
             <Terminal size={20} />
             <span className="text-sm font-mono">~/projects</span>
@@ -73,11 +123,11 @@ export default function Projects() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <div
               key={index}
-              className="terminal-card group p-6 relative"
+              className="project-card terminal-card group p-6 relative"
             >
               <div className="absolute top-4 right-4 text-xs text-muted-foreground font-mono">
                 ID: {project.id}
@@ -127,3 +177,4 @@ export default function Projects() {
     </section>
   );
 }
+

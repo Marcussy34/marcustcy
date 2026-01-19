@@ -3,6 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { ChevronRight, ChevronDown, ChevronUp, Briefcase } from "lucide-react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const experience = [
   {
@@ -39,50 +43,48 @@ const experience = [
   },
 ];
 
-// Individual experience card with scroll-based animation
+// Individual experience card with GSAP scroll animation
 interface ExperienceCardProps {
   item: typeof experience[0];
   index: number;
 }
 
 function ExperienceCard({ item, index }: ExperienceCardProps) {
-  const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   
-  // Each card observes itself for scroll-based reveal
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect(); // Only animate once
+    if (!cardRef.current) return;
+    
+    // Alternating left/right direction
+    const isFromLeft = index % 2 === 0;
+    
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardRef.current,
+        { 
+          opacity: 0, 
+          x: isFromLeft ? -50 : 50 
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
         }
-      },
-      { threshold: 0.2, rootMargin: '0px 0px -50px 0px' }
-    );
+      );
+    });
     
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-    
-    return () => observer.disconnect();
-  }, []);
-  
-  // Alternating left/right direction
-  const isFromLeft = index % 2 === 0;
-  
-  const animationStyle = {
-    opacity: isVisible ? 1 : 0,
-    transform: isVisible 
-      ? 'translateX(0)' 
-      : `translateX(${isFromLeft ? '-50px' : '50px'})`,
-    transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-  };
+    return () => ctx.revert();
+  }, [index]);
 
   return (
     <div
       ref={cardRef}
-      style={animationStyle}
       className="relative pl-8 md:pl-12 group"
     >
       {/* Timeline Dot */}
@@ -123,38 +125,38 @@ function ExperienceCard({ item, index }: ExperienceCardProps) {
   );
 }
 
-// Animated button component with scroll-based fade-in
+// Animated button component with GSAP scroll-based fade-in
 function AnimatedButton({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
   const buttonRef = useRef<HTMLDivElement>(null);
-  const [show, setShow] = useState(false);
   
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShow(true);
-          observer.disconnect();
+    if (!buttonRef.current) return;
+    
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        buttonRef.current,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: buttonRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
         }
-      },
-      { threshold: 0.5 }
-    );
+      );
+    });
     
-    if (buttonRef.current) {
-      observer.observe(buttonRef.current);
-    }
-    
-    return () => observer.disconnect();
+    return () => ctx.revert();
   }, []);
   
   return (
     <div 
       ref={buttonRef}
       className="mt-8 flex justify-center ml-3 md:ml-6"
-      style={{
-        opacity: show ? 1 : 0,
-        transform: show ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'opacity 0.8s ease-out, transform 0.8s ease-out',
-      }}
     >
       <button
         onClick={onClick}
