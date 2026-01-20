@@ -12,22 +12,227 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ASCII Art Header Lines
-const ASCII_HEADER_LINES = [
+// ASCII Art Header - Static frame
+const ASCII_HEADER_TOP = [
   "╔═══════════════════════════════════════╗",
   "║         TROPHY_CABINET.exe            ║",
   "╠═══════════════════════════════════════╣",
-  "║           ___________                 ║",
-  "║          '._==_==_=_.'                ║",
-  "║          .-\\:      /-.                ║",
-  "║         | (|:.     |) |               ║",
-  "║          '-|:.     |-'                ║",
-  "║            \\::.    /                  ║",
-  "║             '::. .'                   ║",
-  "║               ) (                     ║",
-  "║             _.' '._                   ║",
-  "║            '-------'                  ║",
+];
+
+const ASCII_HEADER_BOTTOM = [
   "╚═══════════════════════════════════════╝",
+];
+
+// Trophy rotation frames - smooth Y-axis rotation (16 frames, all centered)
+const TROPHY_FRAMES = [
+  // Frame 0 - Front view (0°)
+  [
+    "║          ___________                  ║",
+    "║         '._==_==_=_.'                 ║",
+    "║         .-\\:      /-.                 ║",
+    "║        | (|:.     |) |                ║",
+    "║         '-|:.     |-'                 ║",
+    "║           \\::.    /                   ║",
+    "║            '::. .'                    ║",
+    "║              ) (                      ║",
+    "║            _.' '._                    ║",
+    "║           '-------'                   ║",
+  ],
+  // Frame 1 - (22.5°)
+  [
+    "║          __________                   ║",
+    "║         '._==_==_.'                   ║",
+    "║         .-\\:     /-.                  ║",
+    "║        | (|:.    |) |                 ║",
+    "║         '-|:.    |-'                  ║",
+    "║           \\::.   /                    ║",
+    "║            '::. '                     ║",
+    "║              ) (                      ║",
+    "║            _.' '._                    ║",
+    "║           '------'                    ║",
+  ],
+  // Frame 2 - (45°)
+  [
+    "║           _________                   ║",
+    "║          '._==_=_.'                   ║",
+    "║          .-\\:    /-.                  ║",
+    "║         | (|:.   |) |                 ║",
+    "║          '-|:.   |-'                  ║",
+    "║            \\::.  /                    ║",
+    "║             '::.'                     ║",
+    "║              )(                       ║",
+    "║            _.'._                      ║",
+    "║           '-----'                     ║",
+  ],
+  // Frame 3 - (67.5°)
+  [
+    "║           ________                    ║",
+    "║          '._=_=_.'                    ║",
+    "║          .-\\:   /-.                   ║",
+    "║         |  |:.  | |                   ║",
+    "║          '-|:.  |-'                   ║",
+    "║            \\::. /                     ║",
+    "║             ':`'                      ║",
+    "║              )(                       ║",
+    "║            _.`._                      ║",
+    "║           '----'                      ║",
+  ],
+  // Frame 4 - Side view (90°)
+  [
+    "║            ______                     ║",
+    "║           '._=_.'                     ║",
+    "║           .-|: -.                     ║",
+    "║          |  |:. |                     ║",
+    "║           '-|:.-'                     ║",
+    "║             |::|                      ║",
+    "║             '::'                      ║",
+    "║              ||                       ║",
+    "║             _``_                      ║",
+    "║            '---'                      ║",
+  ],
+  // Frame 5 - (112.5°)
+  [
+    "║           ________                    ║",
+    "║          '._=_=_.'                    ║",
+    "║          .-/   :\\-.                   ║",
+    "║         | |  .:| |                    ║",
+    "║          '-|  .:|-'                   ║",
+    "║            / .:::\\                    ║",
+    "║             '`:'                      ║",
+    "║              )(                       ║",
+    "║            _.`._                      ║",
+    "║           '----'                      ║",
+  ],
+  // Frame 6 - (135°)
+  [
+    "║           _________                   ║",
+    "║          '._=_==_.'                   ║",
+    "║          .-/    :\\-.                  ║",
+    "║         | (|   .:|) |                 ║",
+    "║          '-|   .:|-'                  ║",
+    "║            /  .::\\                    ║",
+    "║             '.`:'                     ║",
+    "║              )(                       ║",
+    "║            _.'._                      ║",
+    "║           '-----'                     ║",
+  ],
+  // Frame 7 - (157.5°)
+  [
+    "║          __________                   ║",
+    "║         '._==_==_.'                   ║",
+    "║         .-/     :\\-.                  ║",
+    "║        | (|    .:|) |                 ║",
+    "║         '-|    .:|-'                  ║",
+    "║           /   .::\\                    ║",
+    "║            ' .`:'                     ║",
+    "║              ) (                      ║",
+    "║            _.' '._                    ║",
+    "║           '------'                    ║",
+  ],
+  // Frame 8 - Back view (180°)
+  [
+    "║          ___________                  ║",
+    "║         '._=_==_=_.'                  ║",
+    "║         .-/      :\\-.                 ║",
+    "║        | (|     .:|) |                ║",
+    "║         '-|     .:|-'                 ║",
+    "║           /    .::\\                   ║",
+    "║            '. .:'                     ║",
+    "║              ) (                      ║",
+    "║            _.' '._                    ║",
+    "║           '-------'                   ║",
+  ],
+  // Frame 9 - (202.5°)
+  [
+    "║          __________                   ║",
+    "║         '._==_==_.'                   ║",
+    "║         .-/     :\\-.                  ║",
+    "║        | (|    .:|) |                 ║",
+    "║         '-|    .:|-'                  ║",
+    "║           /   .::\\                    ║",
+    "║            ' .`:'                     ║",
+    "║              ) (                      ║",
+    "║            _.' '._                    ║",
+    "║           '------'                    ║",
+  ],
+  // Frame 10 - (225°)
+  [
+    "║           _________                   ║",
+    "║          '._=_==_.'                   ║",
+    "║          .-/    :\\-.                  ║",
+    "║         | (|   .:|) |                 ║",
+    "║          '-|   .:|-'                  ║",
+    "║            /  .::\\                    ║",
+    "║             '.`:'                     ║",
+    "║              )(                       ║",
+    "║            _.'._                      ║",
+    "║           '-----'                     ║",
+  ],
+  // Frame 11 - (247.5°)
+  [
+    "║           ________                    ║",
+    "║          '._=_=_.'                    ║",
+    "║          .-/   :\\-.                   ║",
+    "║         | |  .:| |                    ║",
+    "║          '-|  .:|-'                   ║",
+    "║            / .:::\\                    ║",
+    "║             '`:'                      ║",
+    "║              )(                       ║",
+    "║            _.`._                      ║",
+    "║           '----'                      ║",
+  ],
+  // Frame 12 - Side view (270°)
+  [
+    "║            ______                     ║",
+    "║           '._=_.'                     ║",
+    "║           .-|: -.                     ║",
+    "║          |  |:. |                     ║",
+    "║           '-|:.-'                     ║",
+    "║             |::|                      ║",
+    "║             '::'                      ║",
+    "║              ||                       ║",
+    "║             _``_                      ║",
+    "║            '---'                      ║",
+  ],
+  // Frame 13 - (292.5°)
+  [
+    "║           ________                    ║",
+    "║          '._=_=_.'                    ║",
+    "║          .-\\:   /-.                   ║",
+    "║         |  |:.  | |                   ║",
+    "║          '-|:.  |-'                   ║",
+    "║            \\::. /                     ║",
+    "║             ':`'                      ║",
+    "║              )(                       ║",
+    "║            _.`._                      ║",
+    "║           '----'                      ║",
+  ],
+  // Frame 14 - (315°)
+  [
+    "║           _________                   ║",
+    "║          '._==_=_.'                   ║",
+    "║          .-\\:    /-.                  ║",
+    "║         | (|:.   |) |                 ║",
+    "║          '-|:.   |-'                  ║",
+    "║            \\::.  /                    ║",
+    "║             '::.'                     ║",
+    "║              )(                       ║",
+    "║            _.'._                      ║",
+    "║           '-----'                     ║",
+  ],
+  // Frame 15 - (337.5°)
+  [
+    "║          __________                   ║",
+    "║         '._==_==_.'                   ║",
+    "║         .-\\:     /-.                  ║",
+    "║        | (|:.    |) |                 ║",
+    "║         '-|:.    |-'                  ║",
+    "║           \\::.   /                    ║",
+    "║            '::. '                     ║",
+    "║              ) (                      ║",
+    "║            _.' '._                    ║",
+    "║           '------'                    ║",
+  ],
 ];
 
 // ASCII Section Divider
@@ -135,13 +340,16 @@ function StatsPanel() {
   );
 }
 
-// ASCII Header with Typing Animation and 3D Rotate
+// ASCII Header with Typing Animation and Frame-based Trophy Rotation
 function AsciiHeader() {
+  const totalLines = ASCII_HEADER_TOP.length + TROPHY_FRAMES[0].length + ASCII_HEADER_BOTTOM.length;
   const [visibleLines, setVisibleLines] = useState<number>(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [trophyFrame, setTrophyFrame] = useState(0);
 
+  // Typing animation
   useEffect(() => {
-    if (visibleLines < ASCII_HEADER_LINES.length) {
+    if (visibleLines < totalLines) {
       const timer = setTimeout(() => {
         setVisibleLines(prev => prev + 1);
       }, 80);
@@ -149,26 +357,41 @@ function AsciiHeader() {
     } else {
       setIsComplete(true);
     }
-  }, [visibleLines]);
+  }, [visibleLines, totalLines]);
+
+  // Trophy rotation animation (frame-based)
+  useEffect(() => {
+    if (!isComplete) return;
+
+    const interval = setInterval(() => {
+      setTrophyFrame(prev => (prev + 1) % TROPHY_FRAMES.length);
+    }, 200); // 200ms per frame, 16 frames = 3.2s per full rotation
+
+    return () => clearInterval(interval);
+  }, [isComplete]);
+
+  // Build the current display lines
+  const getCurrentLines = () => {
+    const lines: string[] = [];
+
+    // Add top border
+    ASCII_HEADER_TOP.forEach(line => lines.push(line));
+
+    // Add current trophy frame
+    TROPHY_FRAMES[trophyFrame].forEach(line => lines.push(line));
+
+    // Add bottom border
+    ASCII_HEADER_BOTTOM.forEach(line => lines.push(line));
+
+    return lines;
+  };
+
+  const allLines = getCurrentLines();
 
   return (
-    <div className="hidden md:block perspective-1000">
-      <motion.div
-        className="font-mono text-xs lg:text-sm text-primary/80 leading-tight whitespace-pre select-none"
-        initial={{ rotateY: 0 }}
-        animate={isComplete ? {
-          rotateY: [0, 8, 0, -8, 0],
-        } : {}}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        style={{
-          transformStyle: "preserve-3d",
-        }}
-      >
-        {ASCII_HEADER_LINES.slice(0, visibleLines).map((line, idx) => (
+    <div className="hidden md:block">
+      <div className="font-mono text-xs lg:text-sm text-primary/80 leading-tight whitespace-pre select-none">
+        {allLines.slice(0, visibleLines).map((line, idx) => (
           <div key={idx} className="overflow-hidden">
             {line}
           </div>
@@ -176,7 +399,7 @@ function AsciiHeader() {
         {!isComplete && (
           <span className="inline-block w-2 h-4 bg-primary animate-pulse" />
         )}
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -343,7 +566,8 @@ function AchievementCard({
 
 export default function AchievementsPage() {
   const [filter, setFilter] = useState<"All" | "2025" | "2024">("All");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  // Default to list view
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   // Scroll to top when page loads
   useEffect(() => {
