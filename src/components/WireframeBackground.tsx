@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 type WireframeBackgroundProps = {
@@ -21,16 +21,58 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const frameRef = useRef<number>(0);
+  const [isReady, setIsReady] = useState(false);
 
+  // Wait for container to have dimensions
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    const checkDimensions = () => {
+      if (container.clientWidth > 0 && container.clientHeight > 0) {
+        setIsReady(true);
+        return true;
+      }
+      return false;
+    };
+
+    // Check immediately
+    if (checkDimensions()) return;
+
+    // Use ResizeObserver to wait for valid dimensions
+    const observer = new ResizeObserver(() => {
+      if (checkDimensions()) {
+        observer.disconnect();
+      }
+    });
+    observer.observe(container);
+
+    // Fallback timeout
+    const timeout = setTimeout(() => {
+      setIsReady(true);
+    }, 100);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isReady) return;
+    
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Get actual dimensions, fallback to window size if needed
+    const width = container.clientWidth || window.innerWidth;
+    const height = container.clientHeight || window.innerHeight;
 
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       60,
-      container.clientWidth / container.clientHeight,
+      width / height,
       0.1,
       1000
     );
@@ -42,9 +84,11 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
       alpha: true,
       powerPreference: "low-power",
     });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setClearColor(0x000000, 0);
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -143,8 +187,10 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
     // Handle resize
     const handleResize = () => {
       if (!container || !rendererRef.current) return;
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      const width = container.clientWidth || window.innerWidth;
+      const height = container.clientHeight || window.innerHeight;
+      
+      if (width <= 0 || height <= 0) return;
 
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -172,12 +218,13 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [color, opacity, speed, shapeCount]);
+  }, [color, opacity, speed, shapeCount, isReady]);
 
   return (
     <div
       ref={containerRef}
       className={`absolute inset-0 pointer-events-none overflow-hidden ${className ?? ""}`}
+      style={{ width: '100%', height: '100%', minHeight: '100%' }}
       aria-hidden="true"
     />
   );
