@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp --help:*)",
+      "Bash(claude mcp add sequential-thinking -- npx -y @modelcontextprotocol/server-sequential-thinking)",
+      "Bash(claude mcp add:*)",
+      "Bash(claude mcp add-json:*)",
+      "WebSearch",
+      "Bash(claude mcp remove:*)",
+      "Bash(claude mcp list:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(npx skills add CloudAI-X/threejs-skills)",
+      "Bash(npx skills:*)",
+      "Bash(npx skills add CloudAI-X/threejs-skills -y)",
+      "Bash(npm run build:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

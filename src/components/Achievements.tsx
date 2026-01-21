@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import WireframeBackground from "./WireframeBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,12 +144,21 @@ export default function Achievements() {
   const totalCount = achievements.length;
 
   return (
-    <section 
-      id="achievements" 
-      className="py-24 relative border-t border-border bg-background"
+    <section
+      id="achievements"
+      className="py-24 relative border-t border-border bg-background overflow-hidden"
       style={{ zIndex: 10 }}
     >
-      <div className="container mx-auto px-6">
+      {/* Wireframe 3D Background */}
+      <WireframeBackground
+        color="#22c55e"
+        opacity={0.1}
+        speed={0.2}
+        shapeCount={6}
+        className="z-0"
+      />
+
+      <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>

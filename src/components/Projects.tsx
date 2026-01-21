@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, useMotionValue, useSpring, useTransform, useMotionTemplate } from "framer-motion";
+import WireframeBackground from "./WireframeBackground";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -89,8 +90,17 @@ export default function Projects() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="projects" className="py-24 relative border-t border-border">
-      <div className="container mx-auto px-6">
+    <section ref={sectionRef} id="projects" className="py-24 relative border-t border-border overflow-hidden">
+      {/* Wireframe 3D Background */}
+      <WireframeBackground
+        color="#22c55e"
+        opacity={0.12}
+        speed={0.25}
+        shapeCount={10}
+        className="z-0"
+      />
+
+      <div className="container mx-auto px-6 relative z-10">
         <div ref={headerRef} className="mb-16">
           <div className="flex items-center gap-2 text-primary mb-2">
             <Terminal size={20} />
