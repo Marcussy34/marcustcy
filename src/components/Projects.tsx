@@ -96,7 +96,7 @@ export default function Projects() {
         color="#22c55e"
         opacity={0.12}
         speed={0.25}
-        shapeCount={10}
+        shapeCount={18}
         className="z-0"
       />
 

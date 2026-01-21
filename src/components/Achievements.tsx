@@ -154,7 +154,7 @@ export default function Achievements() {
         color="#22c55e"
         opacity={0.1}
         speed={0.2}
-        shapeCount={6}
+        shapeCount={14}
         className="z-0"
       />
 

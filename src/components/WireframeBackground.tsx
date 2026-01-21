@@ -99,15 +99,79 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
       opacity: opacity,
     });
 
-    // Shape geometries
-    const geometries = [
-      new THREE.IcosahedronGeometry(1, 0),
-      new THREE.OctahedronGeometry(1, 0),
-      new THREE.TetrahedronGeometry(1, 0),
-      new THREE.DodecahedronGeometry(1, 0),
-      new THREE.TorusGeometry(0.7, 0.3, 8, 12),
-      new THREE.BoxGeometry(1, 1, 1),
-    ];
+    // Developer-themed shape geometries
+    const geometries: THREE.BufferGeometry[] = [];
+    
+    // 1. Binary Orb - Globe-like sphere (tech data visualization)
+    geometries.push(new THREE.SphereGeometry(1, 12, 8));
+    
+    // 2. Code Block - Elongated terminal window shape
+    geometries.push(new THREE.BoxGeometry(1.6, 1, 0.1, 2, 2, 1));
+    
+    // 3. Circuit Grid - Flat segmented plane (PCB/circuit board)
+    geometries.push(new THREE.PlaneGeometry(1.5, 1.5, 4, 4));
+    
+    // 4. Data Cube - Cube with inner structure
+    geometries.push(new THREE.BoxGeometry(1, 1, 1, 2, 2, 2));
+    
+    // 5. Helix/Data Stream - Spiral tube
+    const helixCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, -1, 0),
+      new THREE.Vector3(0.5, -0.5, 0.5),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(-0.5, 0.5, -0.5),
+      new THREE.Vector3(0, 1, 0),
+    ]);
+    geometries.push(new THREE.TubeGeometry(helixCurve, 20, 0.08, 6, false));
+    
+    // 6. Terminal Frame - Beveled rectangle (monitor outline)
+    const frameShape = new THREE.Shape();
+    frameShape.moveTo(-0.8, -0.5);
+    frameShape.lineTo(0.8, -0.5);
+    frameShape.lineTo(0.8, 0.5);
+    frameShape.lineTo(-0.8, 0.5);
+    frameShape.lineTo(-0.8, -0.5);
+    const frameHole = new THREE.Path();
+    frameHole.moveTo(-0.65, -0.35);
+    frameHole.lineTo(0.65, -0.35);
+    frameHole.lineTo(0.65, 0.35);
+    frameHole.lineTo(-0.65, 0.35);
+    frameHole.lineTo(-0.65, -0.35);
+    frameShape.holes.push(frameHole);
+    geometries.push(new THREE.ExtrudeGeometry(frameShape, { depth: 0.1, bevelEnabled: false }));
+    
+    // 7. Ethereum Diamond - The iconic ETH logo shape
+    const ethGeometry = new THREE.BufferGeometry();
+    const ethVertices = new Float32Array([
+      // Top pyramid
+      0, 1.2, 0,      // top point
+      -0.7, 0, 0.4,   // front left
+      0.7, 0, 0.4,    // front right
+      0, 1.2, 0,      // top point
+      0.7, 0, 0.4,    // front right
+      0.7, 0, -0.4,   // back right
+      0, 1.2, 0,      // top point
+      0.7, 0, -0.4,   // back right
+      -0.7, 0, -0.4,  // back left
+      0, 1.2, 0,      // top point
+      -0.7, 0, -0.4,  // back left
+      -0.7, 0, 0.4,   // front left
+      // Bottom pyramid
+      0, -1.2, 0,     // bottom point
+      0.7, 0, 0.4,    // front right
+      -0.7, 0, 0.4,   // front left
+      0, -1.2, 0,     // bottom point
+      0.7, 0, -0.4,   // back right
+      0.7, 0, 0.4,    // front right
+      0, -1.2, 0,     // bottom point
+      -0.7, 0, -0.4,  // back left
+      0.7, 0, -0.4,   // back right
+      0, -1.2, 0,     // bottom point
+      -0.7, 0, 0.4,   // front left
+      -0.7, 0, -0.4,  // back left
+    ]);
+    ethGeometry.setAttribute('position', new THREE.BufferAttribute(ethVertices, 3));
+    geometries.push(ethGeometry);
 
     // Create shapes with random positions and properties
     interface ShapeData {
@@ -119,6 +183,24 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
     }
 
     const shapes: ShapeData[] = [];
+    
+    // Store positions to prevent overlap
+    const placedPositions: { x: number; y: number; z: number; radius: number }[] = [];
+    const MIN_DISTANCE = 12; // Minimum distance between shape centers
+    
+    // Helper to check if position is valid (no overlap)
+    const isValidPosition = (x: number, y: number, z: number, radius: number): boolean => {
+      for (const pos of placedPositions) {
+        const dx = x - pos.x;
+        const dy = y - pos.y;
+        const dz = z - pos.z;
+        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (distance < MIN_DISTANCE + radius + pos.radius) {
+          return false;
+        }
+      }
+      return true;
+    };
 
     for (let i = 0; i < shapeCount; i++) {
       const geoIndex = Math.floor(Math.random() * geometries.length);
@@ -126,14 +208,24 @@ const WireframeBackground: React.FC<WireframeBackgroundProps> = ({
       const edges = new THREE.EdgesGeometry(geometry);
       const wireframe = new THREE.LineSegments(edges, material.clone());
 
-      // Random scale
-      const scale = 1 + Math.random() * 3;
+      // Random scale - larger for better visibility
+      const scale = 2 + Math.random() * 4;
       wireframe.scale.setScalar(scale);
-
-      // Random position in a wider area
-      wireframe.position.x = (Math.random() - 0.5) * 60;
-      wireframe.position.y = (Math.random() - 0.5) * 40;
-      wireframe.position.z = (Math.random() - 0.5) * 20 - 10;
+      
+      // Find a valid position without overlap
+      let x = 0, y = 0, z = 0;
+      let attempts = 0;
+      const maxAttempts = 50;
+      
+      do {
+        x = (Math.random() - 0.5) * 100;
+        y = (Math.random() - 0.5) * 60;
+        z = (Math.random() - 0.5) * 30 - 15;
+        attempts++;
+      } while (!isValidPosition(x, y, z, scale * 2) && attempts < maxAttempts);
+      
+      wireframe.position.set(x, y, z);
+      placedPositions.push({ x, y, z, radius: scale * 2 });
 
       // Random initial rotation
       wireframe.rotation.x = Math.random() * Math.PI;
