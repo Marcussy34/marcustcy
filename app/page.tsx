@@ -229,10 +229,10 @@ export default function Home() {
     <div className="min-h-screen bg-paper">
       {/* Navigation - Fixed minimal nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-paper/80 backdrop-blur-sm border-b border-divider">
-        <div className="mx-auto max-w-[672px] px-6 py-4 flex justify-between items-center">
+        <div className="mx-auto max-w-5xl px-6 py-4 flex justify-between items-center">
           <a
             href="#hero"
-            className="font-serif text-lg font-semibold text-ink hover:text-accent transition-colors"
+            className="font-serif text-xl font-normal text-ink hover:text-accent transition-colors"
           >
             Marcus T.
           </a>
@@ -260,8 +260,8 @@ export default function Home() {
           className="min-h-screen flex flex-col items-center justify-center px-6"
         >
           <BlurFade delay={0.1}>
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold text-ink text-center">
-              Marcus T.
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-normal text-ink text-center tracking-tight">
+              Marcus Tan Chi Yau
             </h1>
           </BlurFade>
           <BlurFade delay={0.2}>
@@ -281,7 +281,7 @@ export default function Home() {
         <section id="about" className="py-24 px-6 bg-paper-warm">
           <div className="mx-auto max-w-[672px]">
             <BlurFade delay={0.1} inView>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink mb-8">
+              <h2 className="font-serif text-3xl md:text-4xl font-normal text-ink tracking-tight mb-8">
                 About
               </h2>
             </BlurFade>
@@ -300,7 +300,7 @@ export default function Home() {
         <section id="experience" className="py-24 px-6">
           <div className="mx-auto max-w-[672px]">
             <BlurFade delay={0.1} inView>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink mb-12">
+              <h2 className="font-serif text-3xl md:text-4xl font-normal text-ink tracking-tight mb-12">
                 Experience
               </h2>
             </BlurFade>
@@ -330,7 +330,7 @@ export default function Home() {
 
             {/* Education */}
             <BlurFade delay={0.3} inView>
-              <h3 className="font-serif text-2xl font-bold text-ink mt-16 mb-8">
+              <h3 className="font-serif text-2xl font-normal text-ink tracking-tight mt-16 mb-8">
                 Education
               </h3>
             </BlurFade>
@@ -364,7 +364,7 @@ export default function Home() {
         <section id="hackathons" className="py-24 px-6 bg-paper-warm">
           <div className="mx-auto max-w-[672px]">
             <BlurFade delay={0.1} inView>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink mb-12">
+              <h2 className="font-serif text-3xl md:text-4xl font-normal text-ink tracking-tight mb-12">
                 Hackathon Wins
               </h2>
             </BlurFade>
@@ -372,7 +372,7 @@ export default function Home() {
             {/* Large counter - the standout element */}
             <BlurFade delay={0.2} inView>
               <div className="text-center mb-16">
-                <span className="font-serif text-8xl md:text-9xl font-bold text-accent">
+                <span className="font-serif text-8xl md:text-9xl font-medium text-accent">
                   19
                 </span>
                 <p className="text-xl text-ink-light mt-2">victories</p>
@@ -446,7 +446,7 @@ export default function Home() {
         <section id="projects" className="py-24 px-6">
           <div className="mx-auto max-w-[672px]">
             <BlurFade delay={0.1} inView>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink mb-12">
+              <h2 className="font-serif text-3xl md:text-4xl font-normal text-ink tracking-tight mb-12">
                 Featured Projects
               </h2>
             </BlurFade>
@@ -488,7 +488,7 @@ export default function Home() {
         <section id="contact" className="py-24 px-6 bg-paper-warm">
           <div className="mx-auto max-w-[672px] text-center">
             <BlurFade delay={0.1} inView>
-              <h2 className="font-serif text-3xl md:text-4xl font-bold text-ink mb-8">
+              <h2 className="font-serif text-3xl md:text-4xl font-normal text-ink tracking-tight mb-8">
                 Get in Touch
               </h2>
             </BlurFade>
